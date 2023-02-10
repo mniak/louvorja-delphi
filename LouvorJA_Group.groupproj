@@ -6,6 +6,9 @@
         <Projects Include="LouvorJA.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="components\bsfd102tokyo\bsfd102Sydney.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -23,14 +26,23 @@
     <Target Name="LouvorJA:Make">
         <MSBuild Projects="LouvorJA.dproj" Targets="Make"/>
     </Target>
+    <Target Name="bsfd102Sydney">
+        <MSBuild Projects="components\bsfd102tokyo\bsfd102Sydney.dproj"/>
+    </Target>
+    <Target Name="bsfd102Sydney:Clean">
+        <MSBuild Projects="components\bsfd102tokyo\bsfd102Sydney.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="bsfd102Sydney:Make">
+        <MSBuild Projects="components\bsfd102tokyo\bsfd102Sydney.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="LouvorJA"/>
+        <CallTarget Targets="LouvorJA;bsfd102Sydney"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="LouvorJA:Clean"/>
+        <CallTarget Targets="LouvorJA:Clean;bsfd102Sydney:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="LouvorJA:Make"/>
+        <CallTarget Targets="LouvorJA:Make;bsfd102Sydney:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
