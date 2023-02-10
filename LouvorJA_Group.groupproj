@@ -1,0 +1,36 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{3A7A098F-8F2D-43C9-93FE-2C51D69FCC8B}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="LouvorJA.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="LouvorJA">
+        <MSBuild Projects="LouvorJA.dproj"/>
+    </Target>
+    <Target Name="LouvorJA:Clean">
+        <MSBuild Projects="LouvorJA.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="LouvorJA:Make">
+        <MSBuild Projects="LouvorJA.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="LouvorJA"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="LouvorJA:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="LouvorJA:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

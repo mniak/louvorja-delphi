@@ -1630,15 +1630,15 @@ var
 begin
   Col := ColumnStart[Pass];
   Dest := pChar(Longint(Dest) + Col * 3);
-  repeat
-    Byte(Dest^) := fOwner.GammaTable[pByte(Longint(Src) + 2)^]; inc(Dest);
-    Byte(Dest^) := fOwner.GammaTable[pByte(Longint(Src) + 1)^]; inc(Dest);
-    Byte(Dest^) := fOwner.GammaTable[pByte(Longint(Src)    )^]; inc(Dest);
-
-    inc(Src, 3);
-    inc(Dest, ColumnIncrement[Pass] * 3 - 3);
-    inc(Col, ColumnIncrement[Pass]);
-  until Col >= ImageWidth;
+//  repeat
+//    Byte(Dest^) := fOwner.GammaTable[pByte(Longint(Src) + 2)^]; inc(Dest);
+//    Byte(Dest^) := fOwner.GammaTable[pByte(Longint(Src) + 1)^]; inc(Dest);
+//    Byte(Dest^) := fOwner.GammaTable[pByte(Longint(Src)    )^]; inc(Dest);
+//
+//    inc(Src, 3);
+//    inc(Dest, ColumnIncrement[Pass] * 3 - 3);
+//    inc(Col, ColumnIncrement[Pass]);
+//  until Col >= ImageWidth;
 end;
 
 procedure TbsPngLayerIDAT.CopyInterlacedRGB16(const Pass: Byte;
@@ -1649,19 +1649,19 @@ begin
   {Get first column and enter in loop}
   Col := ColumnStart[Pass];
   Dest := pChar(Longint(Dest) + Col * 3);
-  repeat
-    Byte(Dest^) := Owner.GammaTable[pByte(Longint(Src) + 4)^]; inc(Dest);
-    Byte(Dest^) := Owner.GammaTable[pByte(Longint(Src) + 2)^]; inc(Dest);
-    Byte(Dest^) := Owner.GammaTable[pByte(Longint(Src)    )^]; inc(Dest);
-
-    Byte(Extra^) := fOwner.GammaTable[pByte(Longint(Src) + 5)^]; inc(Extra);
-    Byte(Extra^) := fOwner.GammaTable[pByte(Longint(Src) + 3)^]; inc(Extra);
-    Byte(Extra^) := fOwner.GammaTable[pByte(Longint(Src) + 1)^]; inc(Extra);
-
-    inc(Src, 6);
-    inc(Dest, ColumnIncrement[Pass] * 3 - 3);
-    inc(Col, ColumnIncrement[Pass]);
-  until Col >= ImageWidth;
+//  repeat
+//    Byte(Dest^) := Owner.GammaTable[pByte(Longint(Src) + 4)^]; inc(Dest);
+//    Byte(Dest^) := Owner.GammaTable[pByte(Longint(Src) + 2)^]; inc(Dest);
+//    Byte(Dest^) := Owner.GammaTable[pByte(Longint(Src)    )^]; inc(Dest);
+//
+//    Byte(Extra^) := fOwner.GammaTable[pByte(Longint(Src) + 5)^]; inc(Extra);
+//    Byte(Extra^) := fOwner.GammaTable[pByte(Longint(Src) + 3)^]; inc(Extra);
+//    Byte(Extra^) := fOwner.GammaTable[pByte(Longint(Src) + 1)^]; inc(Extra);
+//
+//    inc(Src, 6);
+//    inc(Dest, ColumnIncrement[Pass] * 3 - 3);
+//    inc(Col, ColumnIncrement[Pass]);
+//  until Col >= ImageWidth;
 end;
 
 procedure TbsPngLayerIDAT.CopyInterlacedPalette148(const Pass: Byte;
@@ -1674,18 +1674,18 @@ var
   Dest2: PChar;
 begin
   Col := ColumnStart[Pass];
-  repeat
-    CurBit := StartBit[Header.BitDepth];
-    repeat
-      Dest2 := pChar(Longint(Dest) + (Header.BitDepth * Col) div 8);
-      Byte(Dest2^) := Byte(Dest2^) or
-        ( ((Byte(Src^) shr CurBit) and BitTable[Header.BitDepth])
-          shl (StartBit[Header.BitDepth] - (Col * Header.BitDepth mod 8)));
-      inc(Col, ColumnIncrement[Pass]);
-      dec(CurBit, Header.BitDepth);
-    until CurBit < 0;
-    inc(Src);
-  until Col >= ImageWidth;
+//  repeat
+//    CurBit := StartBit[Header.BitDepth];
+//    repeat
+//      Dest2 := pChar(Longint(Dest) + (Header.BitDepth * Col) div 8);
+//      Byte(Dest2^) := Byte(Dest2^) or
+//        ( ((Byte(Src^) shr CurBit) and BitTable[Header.BitDepth])
+//          shl (StartBit[Header.BitDepth] - (Col * Header.BitDepth mod 8)));
+//      inc(Col, ColumnIncrement[Pass]);
+//      dec(CurBit, Header.BitDepth);
+//    until CurBit < 0;
+//    inc(Src);
+//  until Col >= ImageWidth;
 end;
 
 procedure TbsPngLayerIDAT.CopyInterlacedPalette2(const Pass: Byte; Src, Dest,
@@ -1695,17 +1695,17 @@ var
   Dest2: PChar;
 begin
   Col := ColumnStart[Pass];
-  repeat
-    CurBit := 6;
-    repeat
-      Dest2 := pChar(Longint(Dest) + Col div 2);
-      Byte(Dest2^) := Byte(Dest2^) or (((Byte(Src^) shr CurBit) and $3)
-         shl (4 - (4 * Col) mod 8));
-      inc(Col, ColumnIncrement[Pass]);
-      dec(CurBit, 2);
-    until CurBit < 0;
-    inc(Src);
-  until Col >= ImageWidth;
+//  repeat
+//    CurBit := 6;
+//    repeat
+//      Dest2 := pChar(Longint(Dest) + Col div 2);
+//      Byte(Dest2^) := Byte(Dest2^) or (((Byte(Src^) shr CurBit) and $3)
+//         shl (4 - (4 * Col) mod 8));
+//      inc(Col, ColumnIncrement[Pass]);
+//      dec(CurBit, 2);
+//    until CurBit < 0;
+//    inc(Src);
+//  until Col >= ImageWidth;
 end;
 
 procedure TbsPngLayerIDAT.CopyInterlacedGray2(const Pass: Byte;
@@ -1715,17 +1715,17 @@ var
   Dest2: PChar;
 begin
   Col := ColumnStart[Pass];
-  repeat
-    CurBit := 6;
-    repeat
-      Dest2 := pChar(Longint(Dest) + Col div 2);
-      Byte(Dest2^) := Byte(Dest2^) or ((((Byte(Src^) shr CurBit) shl 2) and $F)
-         shl (4 - (Col*4) mod 8));
-      inc(Col, ColumnIncrement[Pass]);
-      dec(CurBit, 2);
-    until CurBit < 0;
-    inc(Src);
-  until Col >= ImageWidth;
+//  repeat
+//    CurBit := 6;
+//    repeat
+//      Dest2 := pChar(Longint(Dest) + Col div 2);
+//      Byte(Dest2^) := Byte(Dest2^) or ((((Byte(Src^) shr CurBit) shl 2) and $F)
+//         shl (4 - (Col*4) mod 8));
+//      inc(Col, ColumnIncrement[Pass]);
+//      dec(CurBit, 2);
+//    until CurBit < 0;
+//    inc(Src);
+//  until Col >= ImageWidth;
 end;
 
 procedure TbsPngLayerIDAT.CopyInterlacedGrayscale16(const Pass: Byte;
@@ -1752,17 +1752,17 @@ begin
   Col := ColumnStart[Pass];
   Dest := pChar(Longint(Dest) + Col * 3);
   Trans := pChar(Longint(Trans) + Col);
-  repeat
-    Trans^ := pChar(Longint(Src) + 3)^;
-    Byte(Dest^)  := fOwner.GammaTable[pByte(Longint(Src) + 2)^]; inc(Dest);
-    Byte(Dest^)  := fOwner.GammaTable[pByte(Longint(Src) + 1)^]; inc(Dest);
-    Byte(Dest^)  := fOwner.GammaTable[pByte(Longint(Src)    )^]; inc(Dest);
-
-    inc(Src, 4);
-    inc(Dest, ColumnIncrement[Pass] * 3 - 3);
-    inc(Trans, ColumnIncrement[Pass]);
-    inc(Col, ColumnIncrement[Pass]);
-  until Col >= ImageWidth;
+//  repeat
+//    Trans^ := pChar(Longint(Src) + 3)^;
+//    Byte(Dest^)  := fOwner.GammaTable[pByte(Longint(Src) + 2)^]; inc(Dest);
+//    Byte(Dest^)  := fOwner.GammaTable[pByte(Longint(Src) + 1)^]; inc(Dest);
+//    Byte(Dest^)  := fOwner.GammaTable[pByte(Longint(Src)    )^]; inc(Dest);
+//
+//    inc(Src, 4);
+//    inc(Dest, ColumnIncrement[Pass] * 3 - 3);
+//    inc(Trans, ColumnIncrement[Pass]);
+//    inc(Col, ColumnIncrement[Pass]);
+//  until Col >= ImageWidth;
 end;
 
 procedure TbsPngLayerIDAT.CopyInterlacedRGBAlpha16(const Pass: Byte;
@@ -1773,21 +1773,21 @@ begin
   Col := ColumnStart[Pass];
   Dest := pChar(Longint(Dest) + Col * 3);
   Trans := pChar(Longint(Trans) + Col);
-  repeat
-    Trans^ := pChar(Longint(Src) + 6)^;
-    Byte(Dest^)  := fOwner.GammaTable[pByte(Longint(Src) + 4)^]; inc(Dest);
-    Byte(Dest^)  := fOwner.GammaTable[pByte(Longint(Src) + 2)^]; inc(Dest);
-    Byte(Dest^)  := fOwner.GammaTable[pByte(Longint(Src)    )^]; inc(Dest);
-
-    Byte(Extra^) := fOwner.GammaTable[pByte(Longint(Src) + 5)^]; inc(Extra);
-    Byte(Extra^) := fOwner.GammaTable[pByte(Longint(Src) + 3)^]; inc(Extra);
-    Byte(Extra^) := fOwner.GammaTable[pByte(Longint(Src) + 1)^]; inc(Extra);
-
-    inc(Src, 8);
-    inc(Dest, ColumnIncrement[Pass] * 3 - 3);
-    inc(Trans, ColumnIncrement[Pass]);
-    inc(Col, ColumnIncrement[Pass]);
-  until Col >= ImageWidth;
+//  repeat
+//    Trans^ := pChar(Longint(Src) + 6)^;
+//    Byte(Dest^)  := fOwner.GammaTable[pByte(Longint(Src) + 4)^]; inc(Dest);
+//    Byte(Dest^)  := fOwner.GammaTable[pByte(Longint(Src) + 2)^]; inc(Dest);
+//    Byte(Dest^)  := fOwner.GammaTable[pByte(Longint(Src)    )^]; inc(Dest);
+//
+//    Byte(Extra^) := fOwner.GammaTable[pByte(Longint(Src) + 5)^]; inc(Extra);
+//    Byte(Extra^) := fOwner.GammaTable[pByte(Longint(Src) + 3)^]; inc(Extra);
+//    Byte(Extra^) := fOwner.GammaTable[pByte(Longint(Src) + 1)^]; inc(Extra);
+//
+//    inc(Src, 8);
+//    inc(Dest, ColumnIncrement[Pass] * 3 - 3);
+//    inc(Trans, ColumnIncrement[Pass]);
+//    inc(Col, ColumnIncrement[Pass]);
+//  until Col >= ImageWidth;
 end;
 
 procedure TbsPngLayerIDAT.CopyInterlacedGrayscaleAlpha8(const Pass: Byte;
@@ -1898,13 +1898,13 @@ procedure TbsPngLayerIDAT.CopyNonInterlacedRGB8(
 var
   I: Integer;
 begin
-  FOR I := 1 TO ImageWidth DO
-  begin
-    Byte(Dest^) := fOwner.GammaTable[pByte(Longint(Src) + 2)^]; inc(Dest);
-    Byte(Dest^) := fOwner.GammaTable[pByte(Longint(Src) + 1)^]; inc(Dest);
-    Byte(Dest^) := fOwner.GammaTable[pByte(Longint(Src)    )^]; inc(Dest);
-    inc(Src, 3);
-  end;
+//  FOR I := 1 TO ImageWidth DO
+//  begin
+//    Byte(Dest^) := fOwner.GammaTable[pByte(Longint(Src) + 2)^]; inc(Dest);
+//    Byte(Dest^) := fOwner.GammaTable[pByte(Longint(Src) + 1)^]; inc(Dest);
+//    Byte(Dest^) := fOwner.GammaTable[pByte(Longint(Src)    )^]; inc(Dest);
+//    inc(Src, 3);
+//  end;
 end;
 
 procedure TbsPngLayerIDAT.CopyNonInterlacedRGB16(
@@ -1914,13 +1914,13 @@ var
 begin
   FOR I := 1 TO ImageWidth DO
   begin
-    Byte(Dest^) := fOwner.GammaTable[pByte(Longint(Src) + 4)^]; inc(Dest);
-    Byte(Dest^) := fOwner.GammaTable[pByte(Longint(Src) + 2)^]; inc(Dest);
-    Byte(Dest^) := fOwner.GammaTable[pByte(Longint(Src)    )^]; inc(Dest);
-    Byte(Extra^) := fOwner.GammaTable[pByte(Longint(Src) + 5)^]; inc(Extra);
-    Byte(Extra^) := fOwner.GammaTable[pByte(Longint(Src) + 3)^]; inc(Extra);
-    Byte(Extra^) := fOwner.GammaTable[pByte(Longint(Src) + 1)^]; inc(Extra);
-    inc(Src, 6);
+//    Byte(Dest^) := fOwner.GammaTable[pByte(Longint(Src) + 4)^]; inc(Dest);
+//    Byte(Dest^) := fOwner.GammaTable[pByte(Longint(Src) + 2)^]; inc(Dest);
+//    Byte(Dest^) := fOwner.GammaTable[pByte(Longint(Src)    )^]; inc(Dest);
+//    Byte(Extra^) := fOwner.GammaTable[pByte(Longint(Src) + 5)^]; inc(Extra);
+//    Byte(Extra^) := fOwner.GammaTable[pByte(Longint(Src) + 3)^]; inc(Extra);
+//    Byte(Extra^) := fOwner.GammaTable[pByte(Longint(Src) + 1)^]; inc(Extra);
+//    inc(Src, 6);
   end;
 end;
 
@@ -1937,11 +1937,11 @@ var
 begin
   FOR i := 1 TO Row_Bytes do
   begin
-    Byte(Dest^) := ((Byte(Src^) shr 2) and $F) or ((Byte(Src^)) and $F0);
-      inc(Dest);
-    Byte(Dest^) := ((Byte(Src^) shl 2) and $F) or ((Byte(Src^) shl 4) and $F0);
-      inc(Dest);
-    inc(Src);
+//    Byte(Dest^) := ((Byte(Src^) shr 2) and $F) or ((Byte(Src^)) and $F0);
+//      inc(Dest);
+//    Byte(Dest^) := ((Byte(Src^) shl 2) and $F) or ((Byte(Src^) shl 4) and $F0);
+//      inc(Dest);
+//    inc(Src);
   end;
 end;
 
@@ -1952,11 +1952,11 @@ var
 begin
   FOR i := 1 TO Row_Bytes do
   begin
-    Byte(Dest^) := ((Byte(Src^) shr 4) and $3) or ((Byte(Src^) shr 2) and $30);
-      inc(Dest);
-    Byte(Dest^) := (Byte(Src^) and $3) or ((Byte(Src^) shl 2) and $30);
-      inc(Dest);
-    inc(Src);
+//    Byte(Dest^) := ((Byte(Src^) shr 4) and $3) or ((Byte(Src^) shr 2) and $30);
+//      inc(Dest);
+//    Byte(Dest^) := (Byte(Src^) and $3) or ((Byte(Src^) shl 2) and $30);
+//      inc(Dest);
+//    inc(Src);
   end;
 end;
 
@@ -1980,11 +1980,11 @@ var
 begin
   FOR I := 1 TO ImageWidth DO
   begin
-    Trans^ := pChar(Longint(Src) + 3)^;
-    Byte(Dest^)  := fOwner.GammaTable[pByte(Longint(Src) + 2)^]; inc(Dest);
-    Byte(Dest^)  := fOwner.GammaTable[pByte(Longint(Src) + 1)^]; inc(Dest);
-    Byte(Dest^)  := fOwner.GammaTable[pByte(Longint(Src)    )^]; inc(Dest);
-    inc(Src, 4); inc(Trans);
+//    Trans^ := pChar(Longint(Src) + 3)^;
+//    Byte(Dest^)  := fOwner.GammaTable[pByte(Longint(Src) + 2)^]; inc(Dest);
+//    Byte(Dest^)  := fOwner.GammaTable[pByte(Longint(Src) + 1)^]; inc(Dest);
+//    Byte(Dest^)  := fOwner.GammaTable[pByte(Longint(Src)    )^]; inc(Dest);
+//    inc(Src, 4); inc(Trans);
   end;
 end;
 
@@ -1995,16 +1995,16 @@ var
 begin
   FOR I := 1 TO ImageWidth DO
   begin
-    Trans^ := pChar(Longint(Src) + 6)^;
-    Byte(Dest^)  := fOwner.GammaTable[pByte(Longint(Src) + 4)^]; inc(Dest);
-    Byte(Dest^)  := fOwner.GammaTable[pByte(Longint(Src) + 2)^]; inc(Dest);
-    Byte(Dest^)  := fOwner.GammaTable[pByte(Longint(Src)    )^]; inc(Dest);
-
-    Byte(Extra^) := fOwner.GammaTable[pByte(Longint(Src) + 5)^]; inc(Extra);
-    Byte(Extra^) := fOwner.GammaTable[pByte(Longint(Src) + 3)^]; inc(Extra);
-    Byte(Extra^) := fOwner.GammaTable[pByte(Longint(Src) + 1)^]; inc(Extra);
-
-    inc(Src, 8); inc(Trans);
+//    Trans^ := pChar(Longint(Src) + 6)^;
+//    Byte(Dest^)  := fOwner.GammaTable[pByte(Longint(Src) + 4)^]; inc(Dest);
+//    Byte(Dest^)  := fOwner.GammaTable[pByte(Longint(Src) + 2)^]; inc(Dest);
+//    Byte(Dest^)  := fOwner.GammaTable[pByte(Longint(Src)    )^]; inc(Dest);
+//
+//    Byte(Extra^) := fOwner.GammaTable[pByte(Longint(Src) + 5)^]; inc(Extra);
+//    Byte(Extra^) := fOwner.GammaTable[pByte(Longint(Src) + 3)^]; inc(Extra);
+//    Byte(Extra^) := fOwner.GammaTable[pByte(Longint(Src) + 1)^]; inc(Extra);
+//
+//    inc(Src, 8); inc(Trans);
   end;
 end;
 
@@ -2282,10 +2282,10 @@ var
 begin
   FOR I := 1 TO ImageWidth DO
   begin
-    Byte(Dest^) := fOwner.InverseGamma[pByte(Longint(Src) + 2)^]; inc(Dest);
-    Byte(Dest^) := fOwner.InverseGamma[pByte(Longint(Src) + 1)^]; inc(Dest);
-    Byte(Dest^) := fOwner.InverseGamma[pByte(Longint(Src)    )^]; inc(Dest);
-    inc(Src, 3);
+//    Byte(Dest^) := fOwner.InverseGamma[pByte(Longint(Src) + 2)^]; inc(Dest);
+//    Byte(Dest^) := fOwner.InverseGamma[pByte(Longint(Src) + 1)^]; inc(Dest);
+//    Byte(Dest^) := fOwner.InverseGamma[pByte(Longint(Src)    )^]; inc(Dest);
+//    inc(Src, 3);
   end {for I}
 end;
 
@@ -2324,11 +2324,11 @@ var
 begin
   FOR i := 1 TO ImageWidth do
   begin
-    Byte(Dest^) := Owner.InverseGamma[PByte(Longint(Src) + 2)^]; inc(Dest);
-    Byte(Dest^) := Owner.InverseGamma[PByte(Longint(Src) + 1)^]; inc(Dest);
-    Byte(Dest^) := Owner.InverseGamma[PByte(Longint(Src)    )^]; inc(Dest);
-    Dest^ := Trans^; inc(Dest);
-    inc(Src, 3); inc(Trans);
+//    Byte(Dest^) := Owner.InverseGamma[PByte(Longint(Src) + 2)^]; inc(Dest);
+//    Byte(Dest^) := Owner.InverseGamma[PByte(Longint(Src) + 1)^]; inc(Dest);
+//    Byte(Dest^) := Owner.InverseGamma[PByte(Longint(Src)    )^]; inc(Dest);
+//    Dest^ := Trans^; inc(Dest);
+//    inc(Src, 3); inc(Trans);
   end;
 end;
 
@@ -2427,13 +2427,13 @@ var
 begin
   Col := ColumnStart[Pass];
   Src := pChar(Longint(Src) + Col * 3);
-  repeat
-    Byte(Dest^) := fOwner.InverseGamma[pByte(Longint(Src) + 2)^]; inc(Dest);
-    Byte(Dest^) := fOwner.InverseGamma[pByte(Longint(Src) + 1)^]; inc(Dest);
-    Byte(Dest^) := fOwner.InverseGamma[pByte(Longint(Src)    )^]; inc(Dest);
-    inc(Src, ColumnIncrement[Pass] * 3);
-    inc(Col, ColumnIncrement[Pass]);
-  until Col >= ImageWidth;
+//  repeat
+//    Byte(Dest^) := fOwner.InverseGamma[pByte(Longint(Src) + 2)^]; inc(Dest);
+//    Byte(Dest^) := fOwner.InverseGamma[pByte(Longint(Src) + 1)^]; inc(Dest);
+//    Byte(Dest^) := fOwner.InverseGamma[pByte(Longint(Src)    )^]; inc(Dest);
+//    inc(Src, ColumnIncrement[Pass] * 3);
+//    inc(Col, ColumnIncrement[Pass]);
+//  until Col >= ImageWidth;
 end;
 
 procedure TbsPngLayerIDAT.EncodeInterlacedRGB16(const Pass: Byte;
@@ -2463,19 +2463,19 @@ var
 begin
   fillchar(Dest^, Row_Bytes, #0);
   Col := ColumnStart[Pass];
-  with Header.BitmapInfo.bmiHeader do
-    repeat
-      CurBit := StartBit[biBitCount];
-      repeat
-        Src2 := pChar(Longint(Src) + (biBitCount * Col) div 8);
-        Byte(Dest^) := Byte(Dest^) or
-          (((Byte(Src2^) shr (StartBit[Header.BitDepth] - (biBitCount * Col)
-            mod 8))) and (BitTable[biBitCount])) shl CurBit;
-        inc(Col, ColumnIncrement[Pass]);
-        dec(CurBit, biBitCount);
-      until CurBit < 0;
-      inc(Dest);
-    until Col >= ImageWidth;
+//  with Header.BitmapInfo.bmiHeader do
+//    repeat
+//      CurBit := StartBit[biBitCount];
+//      repeat
+//        Src2 := pChar(Longint(Src) + (biBitCount * Col) div 8);
+//        Byte(Dest^) := Byte(Dest^) or
+//          (((Byte(Src2^) shr (StartBit[Header.BitDepth] - (biBitCount * Col)
+//            mod 8))) and (BitTable[biBitCount])) shl CurBit;
+//        inc(Col, ColumnIncrement[Pass]);
+//        dec(CurBit, biBitCount);
+//      until CurBit < 0;
+//      inc(Dest);
+//    until Col >= ImageWidth;
 end;
 
 procedure TbsPngLayerIDAT.EncodeInterlacedGrayscale16(const Pass: Byte;
@@ -2500,15 +2500,15 @@ begin
   Col := ColumnStart[Pass];
   Src := pChar(Longint(Src) + Col * 3);
   Trans := pChar(Longint(Trans) + Col);
-  repeat
-    Byte(Dest^) := Owner.InverseGamma[pByte(Longint(Src) + 2)^]; inc(Dest);
-    Byte(Dest^) := Owner.InverseGamma[pByte(Longint(Src) + 1)^]; inc(Dest);
-    Byte(Dest^) := Owner.InverseGamma[pByte(Longint(Src)    )^]; inc(Dest);
-    Dest^ := Trans^; inc(Dest);
-    inc(Src, ColumnIncrement[Pass] * 3);
-    inc(Trans, ColumnIncrement[Pass]);
-    inc(Col, ColumnIncrement[Pass]);
-  until Col >= ImageWidth;
+//  repeat
+//    Byte(Dest^) := Owner.InverseGamma[pByte(Longint(Src) + 2)^]; inc(Dest);
+//    Byte(Dest^) := Owner.InverseGamma[pByte(Longint(Src) + 1)^]; inc(Dest);
+//    Byte(Dest^) := Owner.InverseGamma[pByte(Longint(Src)    )^]; inc(Dest);
+//    Dest^ := Trans^; inc(Dest);
+//    inc(Src, ColumnIncrement[Pass] * 3);
+//    inc(Trans, ColumnIncrement[Pass]);
+//    inc(Col, ColumnIncrement[Pass]);
+//  until Col >= ImageWidth;
 end;
 
 procedure TbsPngLayerIDAT.EncodeInterlacedRGBAlpha16(const Pass: Byte;
