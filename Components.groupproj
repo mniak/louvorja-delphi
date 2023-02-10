@@ -1,0 +1,36 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{554EC348-CF15-4D6A-A9AC-20F348699942}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="components\bsfd102tokyo\bsfd102Sydney.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="bsfd102Sydney">
+        <MSBuild Projects="components\bsfd102tokyo\bsfd102Sydney.dproj"/>
+    </Target>
+    <Target Name="bsfd102Sydney:Clean">
+        <MSBuild Projects="components\bsfd102tokyo\bsfd102Sydney.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="bsfd102Sydney:Make">
+        <MSBuild Projects="components\bsfd102tokyo\bsfd102Sydney.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="bsfd102Sydney"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="bsfd102Sydney:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="bsfd102Sydney:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
