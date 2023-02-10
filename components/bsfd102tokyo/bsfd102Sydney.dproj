@@ -58,8 +58,8 @@
         <DCC_E>false</DCC_E>
         <DCC_F>false</DCC_F>
         <DCC_K>false</DCC_K>
-        <DCC_DcpOutput>..\..\..\..\Components</DCC_DcpOutput>
-        <DCC_BplOutput>..\..\..\..\Components</DCC_BplOutput>
+        <DCC_DcpOutput>.\Build</DCC_DcpOutput>
+        <DCC_BplOutput>.\Build</DCC_BplOutput>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
