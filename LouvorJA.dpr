@@ -46,6 +46,8 @@ uses
 {$R *.res}
 
 begin
+  Settings.Init;
+
   Application.Initialize;
   Application.CreateForm(TDM, DM);
   Application.CreateForm(TfIniciando, fIniciando);
