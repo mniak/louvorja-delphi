@@ -33,7 +33,7 @@ var
 implementation
 
 uses
-  fmMenu, dmComponentes, fmIniciando;
+  fmMenu, dmComponentes, fmIniciando, Settings;
 
 {$R *.dfm}
 
@@ -76,7 +76,7 @@ var
 begin
   url := fmIndex.param.Strings.Values['help'+fIniciando.LANG];
   if (url = '') then
-    Application.MessageBox(PChar('Não foi possível acessar a ajuda! Acesse a ajuda em https://louovorja.com.br!'), fmIndex.TITULO, mb_ok + mb_iconinformation)
+    Application.MessageBox(PChar('Não foi possível acessar a ajuda! Acesse a ajuda em https://louovorja.com.br!'), Settings.Title, mb_ok + mb_iconinformation)
   else
     ShellExecute(handle, nil, PChar(url), nil, nil, SW_MAXIMIZE);
 end;

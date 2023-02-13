@@ -63,7 +63,7 @@ var
 implementation
 
 uses
-  fmMenu, dmComponentes, fmIniciando;
+  fmMenu, dmComponentes, fmIniciando, Settings;
 
 {$R *.dfm}
 
@@ -162,7 +162,7 @@ begin
   except
     on E: Exception do
     begin
-      if (Application.MessageBox(PChar('Não foi possível conectar ao servidor!'+#13#10+'Causa do erro: '+E.Message+#13#10+'Tentar novamente?'),fmIndex.TITULO,mb_yesno+MB_ICONERROR) = 6)
+      if (Application.MessageBox(PChar('Não foi possível conectar ao servidor!'+#13#10+'Causa do erro: '+E.Message+#13#10+'Tentar novamente?'),Settings.Title,mb_yesno+MB_ICONERROR) = 6)
         then ftp_conecta()
         else tmrFecha.Enabled := true;
     end;
@@ -281,7 +281,7 @@ begin
 
   if (fmIndex.param.Strings.Values['ftp'] = '') then
   begin
-    Application.MessageBox(PChar('Não foi possível buscar informações de conexão!'),fmIndex.TITULO,mb_ok+MB_ICONERROR);
+    Application.MessageBox(PChar('Não foi possível buscar informações de conexão!'),Settings.Title,mb_ok+MB_ICONERROR);
     tmrFecha.Enabled := True;
     erro := True;
     Exit;
@@ -321,7 +321,7 @@ begin
           on E: Exception do
           begin
             dados_ftp := False;
-            if (Application.MessageBox(PChar('Não foi possível obter dados FTP! O servidor pode estar indisponível, ou o programa não possui permissões de acesso à internet.'+#13#10+'Causa do erro: '+E.Message+#13#10+'Tentar novamente?'),fmIndex.TITULO,mb_yesno+MB_ICONERROR) <> 6) then
+            if (Application.MessageBox(PChar('Não foi possível obter dados FTP! O servidor pode estar indisponível, ou o programa não possui permissões de acesso à internet.'+#13#10+'Causa do erro: '+E.Message+#13#10+'Tentar novamente?'),Settings.Title,mb_yesno+MB_ICONERROR) <> 6) then
             begin
               fmIndex.erro_log.Lines.Add(E.Message);
               fmIndex.erro_log.Lines.Add(url);
@@ -360,7 +360,7 @@ begin
           end
           else
           begin
-            if (Application.MessageBox(PChar('Não foi possível obter dados da conexão!'+#13#10+'Tentar novamente?'),fmIndex.TITULO,mb_yesno+MB_ICONERROR) <> 6) then
+            if (Application.MessageBox(PChar('Não foi possível obter dados da conexão!'+#13#10+'Tentar novamente?'),Settings.Title,mb_yesno+MB_ICONERROR) <> 6) then
             begin
               fmIndex.erro_log.Lines.Add(ret_ftp);
               fmIndex.erro_log.Lines.Add(url);
@@ -403,7 +403,7 @@ begin
 
   if (ftp.Values['ftp_msg'] <> '') then
   begin
-    Application.MessageBox(PChar(ftp.Values['ftp_msg']),fmIndex.TITULO,mb_ok+MB_ICONERROR);
+    Application.MessageBox(PChar(ftp.Values['ftp_msg']),Settings.Title,mb_ok+MB_ICONERROR);
     fmIndex.loadCol.Strings.Values['FTP'] := '';
     tmrFecha.Enabled := True;
     Exit;

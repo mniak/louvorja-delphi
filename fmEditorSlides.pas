@@ -202,7 +202,7 @@ implementation
 
 {$R *.dfm}
 
-uses dmComponentes, fmMenu;
+uses dmComponentes, fmMenu, Settings;
 
 procedure TfEditorSlides.acaoPauseplay(liga: Boolean);
 begin
@@ -710,7 +710,7 @@ var
 begin
   if (param.Values['modifica'] = '1') then
   begin
-    msg := application.MessageBox('Deseja salvar as modificações deste arquivo?', fmIndex.titulo, mb_yesnocancel + mb_iconquestion);
+    msg := application.MessageBox('Deseja salvar as modificações deste arquivo?', Settings.Title, mb_yesnocancel + mb_iconquestion);
     if (msg = 2) then exit;
     if (msg = 6) then
     begin
@@ -825,7 +825,7 @@ var
 begin
   if (param.Values['modifica'] = '1') then
   begin
-    msg := application.MessageBox('Deseja salvar as modificações deste arquivo?', fmIndex.titulo, mb_yesnocancel + mb_iconquestion);
+    msg := application.MessageBox('Deseja salvar as modificações deste arquivo?', Settings.Title, mb_yesnocancel + mb_iconquestion);
     if (msg = 2) then exit;
 
     if (msg = 6) then
@@ -849,17 +849,17 @@ begin
   begin
     if (Trim(param.Values['audio']) = '') then
     begin
-      application.MessageBox('Escolha um arquivo de áudio para reproduzir!', fmIndex.titulo, mb_ok + mb_iconexclamation);
+      application.MessageBox('Escolha um arquivo de áudio para reproduzir!', Settings.Title, mb_ok + mb_iconexclamation);
       Exit;
     end
     else if not (FileExists(param.Values['audio'])) then
     begin
-      application.MessageBox('Arquivo de áudio não localizado!', fmIndex.titulo, mb_ok + mb_iconerror);
+      application.MessageBox('Arquivo de áudio não localizado!', Settings.Title, mb_ok + mb_iconerror);
       Exit;
     end
     else if (StrToInt('0'+param.Values['slide']) > 1) and (StrToInt(lbTempos.Items[StrToInt('0'+param.Values['slide'])-1]) <= 0) then
     begin
-      application.MessageBox('Não há tempo gravado neste slide! Reproduza a partir do primeiro slide para começar a gravar os tempos.', fmIndex.titulo, mb_ok + MB_ICONEXCLAMATION);
+      application.MessageBox('Não há tempo gravado neste slide! Reproduza a partir do primeiro slide para começar a gravar os tempos.', Settings.Title, mb_ok + MB_ICONEXCLAMATION);
       Exit;
     end
   end;
@@ -868,7 +868,7 @@ end;
 
 procedure TfEditorSlides.btRemoveGrClick(Sender: TObject);
 begin
-  if (application.MessageBox('Deseja realmente remover os tempos dos slides?', fmIndex.titulo, mb_yesno + mb_iconquestion) = 6) then
+  if (application.MessageBox('Deseja realmente remover os tempos dos slides?', Settings.Title, mb_yesno + mb_iconquestion) = 6) then
   begin
     DM.cdsSLIDE_MUSICA2.First;
     while not DM.cdsSLIDE_MUSICA2.Eof do
@@ -1010,7 +1010,7 @@ begin
   // check the correct BASS was loaded
   if (HIWORD(BASS_GetVersion) <> BASSVERSION) then
   begin
-    application.MessageBox('A versão do seu arquivo "BASS.DLL" está incorreta!', fmIndex.titulo, mb_ok + mb_iconerror);
+    application.MessageBox('A versão do seu arquivo "BASS.DLL" está incorreta!', Settings.Title, mb_ok + mb_iconerror);
     Exit;
     //Halt;
   end;
@@ -1034,7 +1034,7 @@ begin
       Exit;
     end;
   except
-    Application.MessageBox(PChar('O programa travou ao tentar reproduzir áudio "'+musica+'"'),fmIndex.TITULO,MB_OK+MB_ICONERROR);
+    Application.MessageBox(PChar('O programa travou ao tentar reproduzir áudio "'+musica+'"'),Settings.Title,MB_OK+MB_ICONERROR);
     Exit;
   end;
 
@@ -1291,7 +1291,7 @@ var
 	s: string;
 begin
 	s := msg + #13#10 + '(Código do Erro: ' + IntToStr(BASS_ErrorGetCode) + ')';
-  application.MessageBox(PChar(s), fmIndex.titulo, mb_ok + mb_iconerror);
+  application.MessageBox(PChar(s), Settings.Title, mb_ok + mb_iconerror);
 end;
 
 procedure TfEditorSlides.FormActivate(Sender: TObject);
@@ -1333,7 +1333,7 @@ begin
 
   if (param.Values['modifica'] = '1') then
   begin
-    msg := application.MessageBox('Deseja salvar as modificações deste arquivo?', fmIndex.titulo, mb_yesnocancel + mb_iconquestion);
+    msg := application.MessageBox('Deseja salvar as modificações deste arquivo?', Settings.Title, mb_yesnocancel + mb_iconquestion);
     if (msg = 2) then
     begin
       Action := caNone;
@@ -1632,14 +1632,14 @@ begin
   begin
     tmrTempo.Enabled := false;
     pauseplay;
-    application.MessageBox('Escolha um arquivo de áudio para reproduzir!', fmIndex.titulo, mb_ok + mb_iconexclamation);
+    application.MessageBox('Escolha um arquivo de áudio para reproduzir!', Settings.Title, mb_ok + mb_iconexclamation);
     Exit;
   end
   else if not (FileExists(param.Values['audio'])) then
   begin
     tmrTempo.Enabled := false;
     pauseplay;
-    application.MessageBox('Arquivo de áudio não localizado!', fmIndex.titulo, mb_ok + mb_iconerror);
+    application.MessageBox('Arquivo de áudio não localizado!', Settings.Title, mb_ok + mb_iconerror);
     Exit;
   end
   else if param.Values['audio_rep'] <> param.Values['audio'] then

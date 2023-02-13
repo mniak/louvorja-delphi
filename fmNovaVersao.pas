@@ -42,7 +42,7 @@ var
 implementation
 
 uses
-  fmMenu, fmAtualiza, fmIniciando;
+  fmMenu, fmAtualiza, fmIniciando, Settings;
 
 
 {$R *.dfm}
@@ -62,7 +62,7 @@ begin
 
   if not (InternetGetConnectedState(@Flags, 0)) then
   begin
-    application.messagebox(PChar('Não foi possível conectar à internet! Verifique sua conexão e tente novamente.'), fmIndex.TITULO, MB_OK + mb_iconerror);
+    application.messagebox(PChar('Não foi possível conectar à internet! Verifique sua conexão e tente novamente.'), Settings.Title, MB_OK + mb_iconerror);
     Exit;
   end;
 
@@ -80,7 +80,7 @@ begin
 
   if not FileExists(arquivo) then
   begin
-    Application.MessageBox('Não foi possível baixar/executar a atualização do menu!'+#13#10+'Favor, acesse o site https://louvorja.com.br/ e efetue a instalação manual da nova versão.',fmIndex.TITULO,mb_ok+mb_iconerror);
+    Application.MessageBox('Não foi possível baixar/executar a atualização do menu!'+#13#10+'Favor, acesse o site https://louvorja.com.br/ e efetue a instalação manual da nova versão.',Settings.Title,mb_ok+mb_iconerror);
     Exit;
   end
   else

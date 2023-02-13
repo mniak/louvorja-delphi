@@ -105,7 +105,7 @@ implementation
 {$R *.dfm}
 
 uses fmMenu, fmMusicaOperador, fmAtualiza, dmComponentes, fmIniciando,
-  fmTransmitir, fmMusicaRetorno;
+  fmTransmitir, fmMusicaRetorno, Settings;
 
 { TfMusica }
 
@@ -510,7 +510,7 @@ begin
     begin
       if (musicaID <= 0) then
         audio := false
-      else if (application.MessageBox(PChar('Arquivo "'+musica+'" não encontrado! Deseja baixar este arquivo agora?'), fmIndex.titulo, mb_yesno + mb_iconerror) = 6) then
+      else if (application.MessageBox(PChar('Arquivo "'+musica+'" não encontrado! Deseja baixar este arquivo agora?'), Settings.Title, mb_yesno + mb_iconerror) = 6) then
       begin
         lista := TStringList.Create;
         lista.Clear;
@@ -522,7 +522,7 @@ begin
 
         if not (FileExists(musica)) then
         begin
-          application.MessageBox(PChar('Não foi possível baixar o arquivo "'+musica+'"! Os slides serão executados sem áudio!'), fmIndex.titulo, mb_ok + mb_iconerror);
+          application.MessageBox(PChar('Não foi possível baixar o arquivo "'+musica+'"! Os slides serão executados sem áudio!'), Settings.Title, mb_ok + mb_iconerror);
           audio := False;
         end;
       end
@@ -535,7 +535,7 @@ begin
       // check the correct BASS was loaded
       if (HIWORD(BASS_GetVersion) <> BASSVERSION) then
       begin
-        application.MessageBox('A versão do seu arquivo "BASS.DLL" está incorreta!', fmIndex.titulo, mb_ok + mb_iconerror);
+        application.MessageBox('A versão do seu arquivo "BASS.DLL" está incorreta!', Settings.Title, mb_ok + mb_iconerror);
         audio := false;
         //Halt;
       end;
@@ -564,7 +564,7 @@ begin
           audio := false;
         end;
       except
-        Application.MessageBox(PChar('O programa travou ao tentar reproduzir áudio "'+musica+'"'),fmIndex.TITULO,MB_OK+MB_ICONERROR);
+        Application.MessageBox(PChar('O programa travou ao tentar reproduzir áudio "'+musica+'"'),Settings.Title,MB_OK+MB_ICONERROR);
         audio := false;
       end;
 
@@ -625,7 +625,7 @@ begin
     begin
       if (DM.qrSLIDE_MUSICA.RecNo <= 1) and (param = 'PB') and (DM.qrSLIDE_MUSICA.FieldByName('URL_MUSICA_PB').AsString = '') then
       begin
-        application.MessageBox(PChar('Esta música não possui playback. Será utilizado o áudio cantado!'), fmIndex.titulo, mb_ok + MB_ICONEXCLAMATION);
+        application.MessageBox(PChar('Esta música não possui playback. Será utilizado o áudio cantado!'), Settings.Title, mb_ok + MB_ICONEXCLAMATION);
         param := '';
       end;
 
@@ -799,7 +799,7 @@ begin
     and (lista_img.IndexOf(DM.qrSLIDE_MUSICA_TEMPOS.FieldByName('IMAGEM').AsString) = -1) then
     begin
       lista_img.Add(DM.qrSLIDE_MUSICA_TEMPOS.FieldByName('IMAGEM').AsString);
-      if (application.MessageBox(PChar('Arquivo "'+fmIndex.dir_config+'imagens\'+DM.qrSLIDE_MUSICA_TEMPOS.FieldByName('IMAGEM').AsString+'" não encontrado! Deseja baixar este arquivo agora?'), fmIndex.titulo, mb_yesno + mb_iconerror) = 6) then
+      if (application.MessageBox(PChar('Arquivo "'+fmIndex.dir_config+'imagens\'+DM.qrSLIDE_MUSICA_TEMPOS.FieldByName('IMAGEM').AsString+'" não encontrado! Deseja baixar este arquivo agora?'), Settings.Title, mb_yesno + mb_iconerror) = 6) then
       begin
         lista := TStringList.Create;
         lista.Clear;
@@ -810,7 +810,7 @@ begin
         fAtualiza.ShowModal;
 
         if not (FileExists(fmIndex.dir_config+'imagens\'+DM.qrSLIDE_MUSICA_TEMPOS.FieldByName('IMAGEM').AsString)) then
-          application.MessageBox(PChar('Não foi possível baixar o arquivo "'+DM.qrSLIDE_MUSICA_TEMPOS.FieldByName('IMAGEM').AsString+'"! A tela ficará preta ao utilizar esta imagem!'), fmIndex.titulo, mb_ok + mb_iconerror);
+          application.MessageBox(PChar('Não foi possível baixar o arquivo "'+DM.qrSLIDE_MUSICA_TEMPOS.FieldByName('IMAGEM').AsString+'"! A tela ficará preta ao utilizar esta imagem!'), Settings.Title, mb_ok + mb_iconerror);
       end
     end;
     DM.qrSLIDE_MUSICA_TEMPOS.Next;
@@ -878,7 +878,7 @@ var
 	s: string;
 begin
 	s := msg + #13#10 + '(Código do Erro: ' + IntToStr(BASS_ErrorGetCode) + ')';
-  application.MessageBox(PChar(s), fmIndex.titulo, mb_ok + mb_iconerror);
+  application.MessageBox(PChar(s), Settings.Title, mb_ok + mb_iconerror);
 end;
 
 procedure TfMusica.FormActivate(Sender: TObject);

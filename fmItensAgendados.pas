@@ -42,11 +42,11 @@ implementation
 
 {$R *.dfm}
 
-uses fmMenu, dmComponentes;
+uses fmMenu, dmComponentes, Settings;
 
 procedure TfItensAgendados.btDelClick(Sender: TObject);
 begin
-  if (application.MessageBox('Deseja realmente excluir este item?', fmIndex.titulo, mb_yesno + mb_iconquestion) <> 6) then Exit;
+  if (application.MessageBox('Deseja realmente excluir este item?', Settings.Title, mb_yesno + mb_iconquestion) <> 6) then Exit;
 
   if (tipo = 'CATEGORIA') then
   begin
@@ -80,7 +80,7 @@ begin
   begin
     if (trim(txtCategoria.Text) = '') then
     begin
-      Application.MessageBox('Digite o nome da categoria!',fmIndex.TITULO,mb_ok+MB_ICONEXCLAMATION);
+      Application.MessageBox('Digite o nome da categoria!',Settings.Title,mb_ok+MB_ICONEXCLAMATION);
       txtCategoria.SetFocus;
       Exit;
     end;
@@ -96,7 +96,7 @@ begin
   begin
     if (trim(txtArquivo.Text) = '') then
     begin
-      Application.MessageBox('Escolha o arquivo!',fmIndex.TITULO,mb_ok+MB_ICONEXCLAMATION);
+      Application.MessageBox('Escolha o arquivo!',Settings.Title,mb_ok+MB_ICONEXCLAMATION);
       txtArquivo.SetFocus;
       Exit;
     end;

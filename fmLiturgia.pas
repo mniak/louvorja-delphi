@@ -89,7 +89,7 @@ implementation
 
 {$R *.dfm}
 
-uses fmMenu, fmBuscaMusica, dmComponentes, fmIniciando;
+uses fmMenu, fmBuscaMusica, dmComponentes, fmIniciando, Settings;
 
 procedure TfLiturgia.edtDiretorioEnter(Sender: TObject);
 begin
@@ -142,21 +142,21 @@ var
 begin
   if (cbItens.ItemIndex < 0) then
   begin
-    application.MessageBox('Escolha o tipo de item!', fmIndex.titulo, mb_ok + MB_ICONEXCLAMATION);
+    application.MessageBox('Escolha o tipo de item!', Settings.Title, mb_ok + MB_ICONEXCLAMATION);
     cbItens.SetFocus;
     Exit;
   end;
 
   if (txtItem.Visible) and (Trim(txtItem.Text) = '') then
   begin
-    application.MessageBox('Defina o nome do item!', fmIndex.titulo, mb_ok + MB_ICONEXCLAMATION);
+    application.MessageBox('Defina o nome do item!', Settings.Title, mb_ok + MB_ICONEXCLAMATION);
     txtItem.SetFocus;
     Exit;
   end;
 
   if (pnlItensAgendados.Visible) and (trim(dblItem.KeyValue) = '') then
   begin
-    application.MessageBox('Escolha o item!', fmIndex.titulo, mb_ok + MB_ICONEXCLAMATION);
+    application.MessageBox('Escolha o item!', Settings.Title, mb_ok + MB_ICONEXCLAMATION);
     dblItem.SetFocus;
     Exit;
   end;
@@ -278,7 +278,7 @@ end;
 
 procedure TfLiturgia.btDelClick(Sender: TObject);
 begin
-  if (application.MessageBox('Deseja realmente excluir este item?', fmIndex.titulo, mb_yesno + mb_iconquestion) <> 6) then Exit;
+  if (application.MessageBox('Deseja realmente excluir este item?', Settings.Title, mb_yesno + mb_iconquestion) <> 6) then Exit;
   fmIndex.apagaItemLiturgia(id);
   Close;
 end;

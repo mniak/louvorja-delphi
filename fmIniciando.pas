@@ -41,7 +41,7 @@ implementation
 
 {$R *.dfm}
 
-uses fmMenu, fmAtualiza, dmComponentes, fmTransmitir;
+uses fmMenu, fmAtualiza, dmComponentes, fmTransmitir, Settings;
 
 procedure TfIniciando.AppCreateForm(InstanceClass: TComponentClass;
   var Reference);
@@ -76,7 +76,6 @@ var
   dir_temp: string;
   dir_config: string;
   url_params: string;
-  TITULO: PChar;
 begin
   Timer1.Enabled := False;
   externo := False;
@@ -90,10 +89,10 @@ begin
   end;
 
   if LANG = 'ES'
-    then TITULO := 'Loor JA'
-  else TITULO := 'Louvor JA';
+    then Settings.Title := 'Loor JA'
+  else Settings.Title := 'Louvor JA';
 
-  lblTitulo.Caption := TITULO;
+  lblTitulo.Caption := Settings.Title;
   lblInfo.Caption := Translate(lblInfo.Caption);
   application.ProcessMessages;
 
@@ -113,7 +112,7 @@ begin
   //**CARREGA BANCO DE DADOS****************************************************
   if not FileExists(dir_config + 'BD.mdb') then
   begin
-    if (application.messagebox(PChar(Translate('Banco de Dados não localizado! Deseja tentar baixar da internet?')), TITULO, MB_yesno + mb_iconerror) <> 6) then
+    if (application.messagebox(PChar(Translate('Banco de Dados não localizado! Deseja tentar baixar da internet?')), Settings.Title, MB_yesno + mb_iconerror) <> 6) then
     begin
       application.terminate;
       Exit;
@@ -122,7 +121,7 @@ begin
     begin
       if not (InternetGetConnectedState(@Flags, 0)) then
       begin
-        application.messagebox(PChar(Translate('Não foi possível conectar à internet! Verifique sua conexão e tente novamente.')), TITULO, MB_OK + mb_iconerror);
+        application.messagebox(PChar(Translate('Não foi possível conectar à internet! Verifique sua conexão e tente novamente.')), Settings.Title, MB_OK + mb_iconerror);
         application.terminate;
         Exit;
       end;
@@ -136,7 +135,7 @@ begin
 
       if not FileExists(dir_config + 'BD.mdb') then
       begin
-        application.messagebox(PChar(Translate('Não foi possível baixar o Banco de Dados da internet. Favor, instale seu programa novamente!')), TITULO, MB_ok + mb_iconerror);
+        application.messagebox(PChar(Translate('Não foi possível baixar o Banco de Dados da internet. Favor, instale seu programa novamente!')), Settings.Title, MB_ok + mb_iconerror);
         application.terminate;
         Exit;
       end;
@@ -152,7 +151,7 @@ begin
   except
     on E: Exception do
     begin
-      application.messagebox(PChar(Translate('Não foi possível conectar ao Banco de Dados.')+#13#10+E.Message), TITULO, MB_OK + mb_iconerror);
+      application.messagebox(PChar(Translate('Não foi possível conectar ao Banco de Dados.')+#13#10+E.Message), Settings.Title, MB_OK + mb_iconerror);
       application.terminate;
     end;
   end;
@@ -186,7 +185,6 @@ begin
     fmIndex.bsRibbonGroup9.Visible := False;
   end;
 
-  fmIndex.TITULO := TITULO;
   fmIndex.arq_liturgia := arq_liturgia;
   fmIndex.senha_bd := senha_bd;
   fmIndex.dir_dados := dir_dados;
@@ -323,9 +321,9 @@ begin
 
 
     //**CARREGA TÍTULOS DO PROGRAMA
-    application.Title := TITULO;
-    fmIndex.Caption := TITULO;
-    fmIndex.pnlTitForm.Caption := TITULO;
+    application.Title := Settings.Title;
+    fmIndex.Caption := Settings.Title;
+    fmIndex.pnlTitForm.Caption := Settings.Title;
 
 
     //**CARGA INICIAL DAS VARIÁVEIS

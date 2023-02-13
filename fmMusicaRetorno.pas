@@ -38,7 +38,7 @@ implementation
 
 {$R *.dfm}
 
-uses fmMenu, fmMusica;
+uses fmMenu, fmMusica, Settings;
 
 procedure TfMusicaRetorno.CreateParams(var Params: TCreateParams);
 begin
@@ -77,7 +77,7 @@ begin
   begin
     if fMusicaRetorno.Tag = 1 then
     begin
-      if (application.MessageBox('Ao fechar esta tela, os slides também serão fechados! Deseja fechar os slides?', fmIndex.titulo, mb_yesno + mb_iconquestion) <> 6) then
+      if (application.MessageBox('Ao fechar esta tela, os slides também serão fechados! Deseja fechar os slides?', Settings.Title, mb_yesno + mb_iconquestion) <> 6) then
       begin
         Abort;
         Exit;

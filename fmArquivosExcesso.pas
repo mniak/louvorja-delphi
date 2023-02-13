@@ -51,7 +51,7 @@ implementation
 
 {$R *.dfm}
 
-uses fmMenu, fmIniciando;
+uses fmMenu, fmIniciando, Settings;
 
 procedure TfArquivosExcesso.bsSkinButton2Click(Sender: TObject);
 begin
@@ -88,7 +88,7 @@ procedure TfArquivosExcesso.btApagaClick(Sender: TObject);
 var
   i: Integer;
 begin
-  if (application.MessageBox(PChar('Anteção: Este recurso irá apagar os arquivos selecionados. Uma vez apagado, não é possível recuperar estes arquivos. Deseja realmente apagar estes arquivos?'), fmIndex.titulo, mb_yesno + MB_ICONWARNING) <> 6)
+  if (application.MessageBox(PChar('Anteção: Este recurso irá apagar os arquivos selecionados. Uma vez apagado, não é possível recuperar estes arquivos. Deseja realmente apagar estes arquivos?'), Settings.Title, mb_yesno + MB_ICONWARNING) <> 6)
     then Exit;
 
   for i := 0 to lvArquivos.Items.Count - 1 do
@@ -218,8 +218,8 @@ begin
   gpBotoes.Visible := true;
 
   if lvArquivos.Items.Count <= 0
-    then application.MessageBox('Nenhum arquivo em excesso encontrado!', fmIndex.titulo, mb_ok + MB_ICONINFORMATION)
-    else application.MessageBox(PChar('Sua coletânea possui '+inttostr(lvArquivos.Items.Count) + ' arquivo(s) em excesso. Marque os arquivos que deseja apagar e pressione o botão "Apagar Arquivos Selecionados".'), fmIndex.titulo, mb_ok + mb_iconinformation);
+    then application.MessageBox('Nenhum arquivo em excesso encontrado!', Settings.Title, mb_ok + MB_ICONINFORMATION)
+    else application.MessageBox(PChar('Sua coletânea possui '+inttostr(lvArquivos.Items.Count) + ' arquivo(s) em excesso. Marque os arquivos que deseja apagar e pressione o botão "Apagar Arquivos Selecionados".'), Settings.Title, mb_ok + mb_iconinformation);
 end;
 
 end.
