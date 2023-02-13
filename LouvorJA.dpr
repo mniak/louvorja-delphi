@@ -40,14 +40,11 @@ uses
   fmMonitorBibliaBusca in 'fmMonitorBibliaBusca.pas' {fMonitorBibliaBusca},
   fmMonitorBiblia in 'fmMonitorBiblia.pas' {fMonitorBiblia},
   fmMonitorMenuMusicas in 'fmMonitorMenuMusicas.pas' {fMonitorMenuMusicas},
-  fmIdentificaMonitores in 'fmIdentificaMonitores.pas' {fIdentificaMonitores},
-  Settings in 'Settings.pas';
+  fmIdentificaMonitores in 'fmIdentificaMonitores.pas' {fIdentificaMonitores};
 
 {$R *.res}
 
 begin
-  Settings.Init;
-
   Application.Initialize;
   Application.CreateForm(TDM, DM);
   Application.CreateForm(TfIniciando, fIniciando);

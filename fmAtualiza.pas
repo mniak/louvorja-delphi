@@ -63,7 +63,7 @@ var
 implementation
 
 uses
-  fmMenu, dmComponentes, fmIniciando, Settings;
+  fmMenu, dmComponentes, fmIniciando;
 
 {$R *.dfm}
 
@@ -88,7 +88,7 @@ begin
     arquivo_temp := 'arquivo_'+formatdatetime('yyyymmdd_hhnnsszzz', Now())+'.~tmp';
     arquivo_ftp := StringReplace(arquivos[i], '\', '/', [rfIgnoreCase, rfReplaceAll]);
 
-    sTitulo.Caption := 'Baixando arquivo '''+ExtractFileName(Settings.TempDir+arquivos[i])+'''';
+    sTitulo.Caption := 'Baixando arquivo '''+ExtractFileName(fmIndex.dir_temp+arquivos[i])+'''';
     sProgressoT.Caption := 'Arquivo '+IntToStr(i+1)+' / '+inttostr(arquivos.Count);
 
     pbProgressoT.Max := arquivos.Count+1;
@@ -115,7 +115,7 @@ begin
 
     try
    // ShowMessage(AnsiToUtf8(ftp_dir+arquivo_ftp));
-      IdFTP1.Get(trim(ftp_dir+arquivo_ftp), Trim(Settings.TempDir+arquivo_temp), true, false);
+      IdFTP1.Get(trim(ftp_dir+arquivo_ftp), Trim(fmIndex.dir_temp+arquivo_temp), true, false);
     except
       on E: Exception do
       begin
@@ -124,8 +124,8 @@ begin
           sTitulo.Caption := 'Falha no download... Tentando novamente...';
           Sleep(2000);
           ftp_conecta();
-          sTitulo.Caption := 'Baixando arquivo '''+ExtractFileName(Settings.TempDir+arquivos[i])+'''';
-          IdFTP1.Get(Trim(ftp_dir+arquivo_ftp), trim(Settings.TempDir+arquivo_temp), true, false);
+          sTitulo.Caption := 'Baixando arquivo '''+ExtractFileName(fmIndex.dir_temp+arquivos[i])+'''';
+          IdFTP1.Get(Trim(ftp_dir+arquivo_ftp), trim(fmIndex.dir_temp+arquivo_temp), true, false);
         except
         //ShowMessage('Erro: ' + E.Message+' = '+ftp_dir+arquivo_ftp);
           arquivos_falha.Add(arquivos[i]);
@@ -162,7 +162,7 @@ begin
   except
     on E: Exception do
     begin
-      if (Application.MessageBox(PChar('Não foi possível conectar ao servidor!'+#13#10+'Causa do erro: '+E.Message+#13#10+'Tentar novamente?'),Settings.Title,mb_yesno+MB_ICONERROR) = 6)
+      if (Application.MessageBox(PChar('Não foi possível conectar ao servidor!'+#13#10+'Causa do erro: '+E.Message+#13#10+'Tentar novamente?'),fmIndex.TITULO,mb_yesno+MB_ICONERROR) = 6)
         then ftp_conecta()
         else tmrFecha.Enabled := true;
     end;
@@ -207,8 +207,8 @@ begin
   if not DirectoryExists(dir)
     then ForceDirectories(dir);
 
-  CopyFile(PChar(Settings.TempDir+arquivo_temp), PChar(ExtractFilePath(application.ExeName)+arquivos[arq]), false);
-  DeleteFile(Settings.TempDir+arquivo_temp);
+  CopyFile(PChar(fmIndex.dir_temp+arquivo_temp), PChar(ExtractFilePath(application.ExeName)+arquivos[arq]), false);
+  DeleteFile(fmIndex.dir_temp+arquivo_temp);
 end;
 
 procedure TfAtualiza.tmrFechaTimer(Sender: TObject);
@@ -268,10 +268,10 @@ begin
 //  if (fmIndex.param.Strings.Values['ftp'] = '') then
 //  begin
     try
-      LinkPag := DM.IdHTTP1.Get(Settings.ParamsURL);
+      LinkPag := DM.IdHTTP1.Get(fmIndex.url_params);
     except
       Sleep(2000);
-      LinkPag := DM.IdHTTP1.Get(Settings.ParamsURL);
+      LinkPag := DM.IdHTTP1.Get(fmIndex.url_params);
     end;
     txt := fmIndex.ExtraiTexto(LinkPag, '<params>', '</params>');
     txt := IfThen(trim(txt) = '', '=', txt);
@@ -281,7 +281,7 @@ begin
 
   if (fmIndex.param.Strings.Values['ftp'] = '') then
   begin
-    Application.MessageBox(PChar('Não foi possível buscar informações de conexão!'),Settings.Title,mb_ok+MB_ICONERROR);
+    Application.MessageBox(PChar('Não foi possível buscar informações de conexão!'),fmIndex.TITULO,mb_ok+MB_ICONERROR);
     tmrFecha.Enabled := True;
     erro := True;
     Exit;
@@ -321,7 +321,7 @@ begin
           on E: Exception do
           begin
             dados_ftp := False;
-            if (Application.MessageBox(PChar('Não foi possível obter dados FTP! O servidor pode estar indisponível, ou o programa não possui permissões de acesso à internet.'+#13#10+'Causa do erro: '+E.Message+#13#10+'Tentar novamente?'),Settings.Title,mb_yesno+MB_ICONERROR) <> 6) then
+            if (Application.MessageBox(PChar('Não foi possível obter dados FTP! O servidor pode estar indisponível, ou o programa não possui permissões de acesso à internet.'+#13#10+'Causa do erro: '+E.Message+#13#10+'Tentar novamente?'),fmIndex.TITULO,mb_yesno+MB_ICONERROR) <> 6) then
             begin
               fmIndex.erro_log.Lines.Add(E.Message);
               fmIndex.erro_log.Lines.Add(url);
@@ -360,7 +360,7 @@ begin
           end
           else
           begin
-            if (Application.MessageBox(PChar('Não foi possível obter dados da conexão!'+#13#10+'Tentar novamente?'),Settings.Title,mb_yesno+MB_ICONERROR) <> 6) then
+            if (Application.MessageBox(PChar('Não foi possível obter dados da conexão!'+#13#10+'Tentar novamente?'),fmIndex.TITULO,mb_yesno+MB_ICONERROR) <> 6) then
             begin
               fmIndex.erro_log.Lines.Add(ret_ftp);
               fmIndex.erro_log.Lines.Add(url);
@@ -403,7 +403,7 @@ begin
 
   if (ftp.Values['ftp_msg'] <> '') then
   begin
-    Application.MessageBox(PChar(ftp.Values['ftp_msg']),Settings.Title,mb_ok+MB_ICONERROR);
+    Application.MessageBox(PChar(ftp.Values['ftp_msg']),fmIndex.TITULO,mb_ok+MB_ICONERROR);
     fmIndex.loadCol.Strings.Values['FTP'] := '';
     tmrFecha.Enabled := True;
     Exit;
@@ -443,16 +443,16 @@ var
   Result : Integer;
   SearchRec: TSearchRec;
 begin
-  if (DirectoryExists(Settings.TempDir)) then
+  if (DirectoryExists(fmIndex.dir_temp)) then
   begin
-    result := FindFirst(Settings.TempDir+'*.*', faAnyFile, SearchRec);
+    result := FindFirst(fmIndex.dir_temp+'*.*', faAnyFile, SearchRec);
     While Result = 0 do
     begin
-      DeleteFile(Settings.TempDir + SearchRec.Name);
+      DeleteFile(fmIndex.dir_temp + SearchRec.Name);
       Result := FindNext(SearchRec);
     end;
   end
-  else CreateDir(Settings.TempDir);
+  else CreateDir(fmIndex.dir_temp);
 end;
 
 end.

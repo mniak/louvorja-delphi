@@ -64,7 +64,7 @@ implementation
 {$R *.dfm}
 
 uses
-  fmMusica, fmMenu, dmComponentes, Settings;
+  fmMusica, fmMenu, dmComponentes;
 
 { TfSlidesMusica }
 
@@ -178,7 +178,7 @@ begin
   begin
     if fMusicaOperador.Tag = 1 then
     begin
-      if (application.MessageBox('Ao fechar esta tela, os slides também serão fechados! Deseja fechar os slides?', Settings.Title, mb_yesno + mb_iconquestion) <> 6) then
+      if (application.MessageBox('Ao fechar esta tela, os slides também serão fechados! Deseja fechar os slides?', fmIndex.titulo, mb_yesno + mb_iconquestion) <> 6) then
       begin
         Abort;
         Exit;

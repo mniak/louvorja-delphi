@@ -41,7 +41,7 @@ implementation
 
 {$R *.dfm}
 
-uses fmMenu, fmAtualiza, dmComponentes, fmTransmitir, Settings;
+uses fmMenu, fmAtualiza, dmComponentes, fmTransmitir;
 
 procedure TfIniciando.AppCreateForm(InstanceClass: TComponentClass;
   var Reference);
@@ -73,7 +73,10 @@ var
   Flags: Cardinal;
   externo: Boolean;
   dir_dados: string;
+  dir_temp: string;
   dir_config: string;
+  url_params: string;
+  TITULO: PChar;
 begin
   Timer1.Enabled := False;
   externo := False;
@@ -87,10 +90,10 @@ begin
   end;
 
   if LANG = 'ES'
-    then Settings.Title := 'Loor JA'
-  else Settings.Title := 'Louvor JA';
+    then TITULO := 'Loor JA'
+  else TITULO := 'Louvor JA';
 
-  lblTitulo.Caption := Settings.Title;
+  lblTitulo.Caption := TITULO;
   lblInfo.Caption := Translate(lblInfo.Caption);
   application.ProcessMessages;
 
@@ -110,7 +113,7 @@ begin
   //**CARREGA BANCO DE DADOS****************************************************
   if not FileExists(dir_config + 'BD.mdb') then
   begin
-    if (application.messagebox(PChar(Translate('Banco de Dados não localizado! Deseja tentar baixar da internet?')), Settings.Title, MB_yesno + mb_iconerror) <> 6) then
+    if (application.messagebox(PChar(Translate('Banco de Dados não localizado! Deseja tentar baixar da internet?')), TITULO, MB_yesno + mb_iconerror) <> 6) then
     begin
       application.terminate;
       Exit;
@@ -119,7 +122,7 @@ begin
     begin
       if not (InternetGetConnectedState(@Flags, 0)) then
       begin
-        application.messagebox(PChar(Translate('Não foi possível conectar à internet! Verifique sua conexão e tente novamente.')), Settings.Title, MB_OK + mb_iconerror);
+        application.messagebox(PChar(Translate('Não foi possível conectar à internet! Verifique sua conexão e tente novamente.')), TITULO, MB_OK + mb_iconerror);
         application.terminate;
         Exit;
       end;
@@ -133,7 +136,7 @@ begin
 
       if not FileExists(dir_config + 'BD.mdb') then
       begin
-        application.messagebox(PChar(Translate('Não foi possível baixar o Banco de Dados da internet. Favor, instale seu programa novamente!')), Settings.Title, MB_ok + mb_iconerror);
+        application.messagebox(PChar(Translate('Não foi possível baixar o Banco de Dados da internet. Favor, instale seu programa novamente!')), TITULO, MB_ok + mb_iconerror);
         application.terminate;
         Exit;
       end;
@@ -149,7 +152,7 @@ begin
   except
     on E: Exception do
     begin
-      application.messagebox(PChar(Translate('Não foi possível conectar ao Banco de Dados.')+#13#10+E.Message), Settings.Title, MB_OK + mb_iconerror);
+      application.messagebox(PChar(Translate('Não foi possível conectar ao Banco de Dados.')+#13#10+E.Message), TITULO, MB_OK + mb_iconerror);
       application.terminate;
     end;
   end;
@@ -157,9 +160,18 @@ begin
 
   //**CARREGA VARIAVEIS*********************************************************
   dir_dados := GetEnvironmentVariable('APPDATA')+'\LouvorJA\';
+  dir_temp := GetEnvironmentVariable('TEMP')+'\LouvorJA\';
+  url_params := 'https://louvorja.com.br/params/params.php';
+
 
   if not(DirectoryExists(dir_dados)) then
     CreateDir(dir_dados);
+
+  if not(DirectoryExists(dir_temp)) then
+    CreateDir(dir_temp);
+
+  if not(DirectoryExists(dir_temp)) then
+    dir_temp := GetEnvironmentVariable('TEMP')+'\';
 
   //**ATIVANDO PROGRAMA*********************************************************
   AppCreateForm(TfmIndex, fmIndex);
@@ -174,11 +186,14 @@ begin
     fmIndex.bsRibbonGroup9.Visible := False;
   end;
 
+  fmIndex.TITULO := TITULO;
   fmIndex.arq_liturgia := arq_liturgia;
   fmIndex.senha_bd := senha_bd;
   fmIndex.dir_dados := dir_dados;
+  fmIndex.dir_temp := dir_temp;
   fmIndex.dir_config := dir_config;
   fmIndex.externo := externo;
+  fmIndex.url_params := url_params;
 
   fmIndex.desenvolvedor(paramexec.Strings.Values['des'] = '1');
   fmIndex.usaFontes(true);
@@ -308,9 +323,9 @@ begin
 
 
     //**CARREGA TÍTULOS DO PROGRAMA
-    application.Title := Settings.Title;
-    fmIndex.Caption := Settings.Title;
-    fmIndex.pnlTitForm.Caption := Settings.Title;
+    application.Title := TITULO;
+    fmIndex.Caption := TITULO;
+    fmIndex.pnlTitForm.Caption := TITULO;
 
 
     //**CARGA INICIAL DAS VARIÁVEIS

@@ -50,7 +50,7 @@ var
 implementation
 
 uses
-  fmMenu, fmAtualiza, dmComponentes, fmIniciando, Settings;
+  fmMenu, fmAtualiza, dmComponentes, fmIniciando;
 
 {$R *.dfm}
 
@@ -107,13 +107,13 @@ begin
 
   if (lista.Count <= 0) then
   begin
-    application.MessageBox(PChar('Nenhum arquivo selecionado!'), Settings.Title, mb_ok + MB_ICONEXCLAMATION);
+    application.MessageBox(PChar('Nenhum arquivo selecionado!'), fmIndex.titulo, mb_ok + MB_ICONEXCLAMATION);
     Exit;
   end;
 
   if not (InternetGetConnectedState(@Flags, 0)) then
   begin
-    application.messagebox(PChar('Não foi possível conectar à internet! Verifique sua conexão e tente novamente.'), Settings.Title, MB_OK + mb_iconerror);
+    application.messagebox(PChar('Não foi possível conectar à internet! Verifique sua conexão e tente novamente.'), fmIndex.TITULO, MB_OK + mb_iconerror);
     Exit;
   end;
 
@@ -125,7 +125,7 @@ begin
   lvArquivos.Items.Clear;
   if (fAtualiza.cancela = true) then
   begin
-    application.MessageBox(PChar('Operação cancelada!'), Settings.Title, mb_ok + MB_ICONEXCLAMATION);
+    application.MessageBox(PChar('Operação cancelada!'), fmIndex.titulo, mb_ok + MB_ICONEXCLAMATION);
     tmrFecha.Enabled := False;
     alerta := False;
     DM.qrARQUIVOS_SISTEMA.Last;
@@ -157,8 +157,8 @@ begin
     btVerifica.Enabled := True;
     lblStatus.Caption := 'Falha no Download: '+inttostr(fAtualiza.arquivos_falha.Count);
 
-    application.MessageBox('Alguns arquivos não puderam ser baixados!'+#13#10+'Pode ser que seu firewall ou antivírus esteja impedindo o download. Adicione este programa à lista de exeções ou desative temporariamente o firewall e antivírus, tente novamente.', Settings.Title, mb_ok + MB_ICONINFORMATION);
-//    if (application.MessageBox('Alguns arquivos não puderam ser baixados!'+#13#10+'Pode ser que seu firewall ou antivírus esteja impedindo o download. Adicione este programa à lista de exeções ou desative temporariamente o firewall e antivírus para baixar os arquivos.'+#13#10+#13#10+'Deseja tentar baixá-los novamente?', Settings.Title, mb_yesno + mb_iconquestion) = 6) then
+    application.MessageBox('Alguns arquivos não puderam ser baixados!'+#13#10+'Pode ser que seu firewall ou antivírus esteja impedindo o download. Adicione este programa à lista de exeções ou desative temporariamente o firewall e antivírus, tente novamente.', fmIndex.titulo, mb_ok + MB_ICONINFORMATION);
+//    if (application.MessageBox('Alguns arquivos não puderam ser baixados!'+#13#10+'Pode ser que seu firewall ou antivírus esteja impedindo o download. Adicione este programa à lista de exeções ou desative temporariamente o firewall e antivírus para baixar os arquivos.'+#13#10+#13#10+'Deseja tentar baixá-los novamente?', fmIndex.titulo, mb_yesno + mb_iconquestion) = 6) then
 //    begin
 //      btBaixaClick(Sender);
 //      Exit;
@@ -167,7 +167,7 @@ begin
   else
   begin
     if (fAtualiza.erro <> true) then
-      application.MessageBox(PChar('Arquivos atualizados com sucesso!'), Settings.Title, mb_ok + mb_iconinformation);
+      application.MessageBox(PChar('Arquivos atualizados com sucesso!'), fmIndex.titulo, mb_ok + mb_iconinformation);
     tmrFecha.Enabled := False;
     alerta := False;
     DM.qrARQUIVOS_SISTEMA.Last;
@@ -263,11 +263,11 @@ begin
 
   if (alerta) and (a_nao <= 0) then
   begin
-    application.MessageBox('Sua coletânea está completa! Nenhum arquivo está faltando.', Settings.Title, mb_ok + MB_ICONINFORMATION);
+    application.MessageBox('Sua coletânea está completa! Nenhum arquivo está faltando.', fmIndex.titulo, mb_ok + MB_ICONINFORMATION);
   end
   else if (alerta) then
   begin
-    if (application.MessageBox(PChar('Sua coletânea possui '+inttostr(a_nao) + ' arquivo(s) faltando ou danificado(s)!' + #13#10 + 'Deseja baixar estes arquivos agora? (necessário conexão com a internet)'), Settings.Title, mb_yesno + mb_iconquestion) = 6) then
+    if (application.MessageBox(PChar('Sua coletânea possui '+inttostr(a_nao) + ' arquivo(s) faltando ou danificado(s)!' + #13#10 + 'Deseja baixar estes arquivos agora? (necessário conexão com a internet)'), fmIndex.titulo, mb_yesno + mb_iconquestion) = 6) then
       btBaixaClick(nil)
   end;
 

@@ -76,7 +76,7 @@ implementation
 
 {$R *.dfm}
 
-uses fmMenu, Settings;
+uses fmMenu;
 
 procedure TfTransmitir.bsSkinButton2Click(Sender: TObject);
 begin
@@ -189,7 +189,7 @@ begin
       else
       begin
         tentativaConexao := 0;
-        Application.MessageBox(PChar('Erro ao iniciar servidor!'),Settings.Title,mb_ok+mb_iconerror);
+        Application.MessageBox(PChar('Erro ao iniciar servidor!'),fmIndex.TITULO,mb_ok+mb_iconerror);
       end;
     end;
   end;

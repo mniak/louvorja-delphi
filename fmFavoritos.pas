@@ -36,7 +36,7 @@ implementation
 
 {$R *.dfm}
 
-uses fmMenu, dmComponentes, Settings;
+uses fmMenu, dmComponentes;
 
 procedure TfFavoritos.dbcFavoritosPaintPanel(DBCtrlGrid: TDBCtrlGrid;
   Index: Integer);
@@ -78,7 +78,7 @@ begin
   DM.cdsFavoritos.Delete;
 
   fmIndex.carregaFavoritos();
-  application.messagebox(PChar('Página '''+nome+''' removida com sucesso dos favoritos!'), Settings.Title, MB_OK + MB_ICONINFORMATION);
+  application.messagebox(PChar('Página '''+nome+''' removida com sucesso dos favoritos!'), fmIndex.TITULO, MB_OK + MB_ICONINFORMATION);
 end;
 
 procedure TfFavoritos.imgFavBtDownClick(Sender: TObject);

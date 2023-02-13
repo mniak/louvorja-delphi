@@ -45,7 +45,7 @@ var
 implementation
 
 uses
-  fmMenu, dmComponentes, Settings;
+  fmMenu, dmComponentes;
 
 {$R *.dfm}
 
@@ -57,21 +57,21 @@ var
 begin
   if trim(edAssunto.text) = '' then
   begin
-    application.messagebox('Coloque o assunto da mensagem!', Settings.Title, MB_OK + mb_iconexclamation);
+    application.messagebox('Coloque o assunto da mensagem!', fmIndex.TITULO, MB_OK + mb_iconexclamation);
     edAssunto.setfocus;
     Exit;
   end;
 
   if trim(mmMensagem.text) = '' then
   begin
-    application.messagebox('Coloque sua mensagem!', Settings.Title, MB_OK + mb_iconexclamation);
+    application.messagebox('Coloque sua mensagem!', fmIndex.TITULO, MB_OK + mb_iconexclamation);
     mmMensagem.setfocus;
     Exit;
   end;
 
   if not InternetGetConnectedState(@Flags, 0) then
   begin
-    application.messagebox('Não foi possível conectar a internet!', Settings.Title, MB_OK + mb_iconerror);
+    application.messagebox('Não foi possível conectar a internet!', fmIndex.TITULO, MB_OK + mb_iconerror);
     Exit;
   end;
 
@@ -98,7 +98,7 @@ begin
 
   btEnvia.Enabled := True;
   lblEnviando.Visible := not btEnvia.Enabled;
-  application.messagebox('Mensagem enviada com sucesso! Correções e melhorias serão analisadas e aplicadas na próxima versão.', Settings.Title, MB_OK + mb_iconinformation);
+  application.messagebox('Mensagem enviada com sucesso! Correções e melhorias serão analisadas e aplicadas na próxima versão.', fmIndex.TITULO, MB_OK + mb_iconinformation);
 
   edNome.Text := '';
   edEmail.Text := '';
