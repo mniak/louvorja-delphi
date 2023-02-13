@@ -55,4 +55,3 @@ begin
   Application.CreateForm(TfTransmitir, fTransmitir);
   Application.Run;
 end.
-
