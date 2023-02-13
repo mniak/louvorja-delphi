@@ -88,7 +88,7 @@ begin
     arquivo_temp := 'arquivo_'+formatdatetime('yyyymmdd_hhnnsszzz', Now())+'.~tmp';
     arquivo_ftp := StringReplace(arquivos[i], '\', '/', [rfIgnoreCase, rfReplaceAll]);
 
-    sTitulo.Caption := 'Baixando arquivo '''+ExtractFileName(fmIndex.dir_temp+arquivos[i])+'''';
+    sTitulo.Caption := 'Baixando arquivo '''+ExtractFileName(Settings.TempDir+arquivos[i])+'''';
     sProgressoT.Caption := 'Arquivo '+IntToStr(i+1)+' / '+inttostr(arquivos.Count);
 
     pbProgressoT.Max := arquivos.Count+1;
@@ -115,7 +115,7 @@ begin
 
     try
    // ShowMessage(AnsiToUtf8(ftp_dir+arquivo_ftp));
-      IdFTP1.Get(trim(ftp_dir+arquivo_ftp), Trim(fmIndex.dir_temp+arquivo_temp), true, false);
+      IdFTP1.Get(trim(ftp_dir+arquivo_ftp), Trim(Settings.TempDir+arquivo_temp), true, false);
     except
       on E: Exception do
       begin
@@ -124,8 +124,8 @@ begin
           sTitulo.Caption := 'Falha no download... Tentando novamente...';
           Sleep(2000);
           ftp_conecta();
-          sTitulo.Caption := 'Baixando arquivo '''+ExtractFileName(fmIndex.dir_temp+arquivos[i])+'''';
-          IdFTP1.Get(Trim(ftp_dir+arquivo_ftp), trim(fmIndex.dir_temp+arquivo_temp), true, false);
+          sTitulo.Caption := 'Baixando arquivo '''+ExtractFileName(Settings.TempDir+arquivos[i])+'''';
+          IdFTP1.Get(Trim(ftp_dir+arquivo_ftp), trim(Settings.TempDir+arquivo_temp), true, false);
         except
         //ShowMessage('Erro: ' + E.Message+' = '+ftp_dir+arquivo_ftp);
           arquivos_falha.Add(arquivos[i]);
@@ -207,8 +207,8 @@ begin
   if not DirectoryExists(dir)
     then ForceDirectories(dir);
 
-  CopyFile(PChar(fmIndex.dir_temp+arquivo_temp), PChar(ExtractFilePath(application.ExeName)+arquivos[arq]), false);
-  DeleteFile(fmIndex.dir_temp+arquivo_temp);
+  CopyFile(PChar(Settings.TempDir+arquivo_temp), PChar(ExtractFilePath(application.ExeName)+arquivos[arq]), false);
+  DeleteFile(Settings.TempDir+arquivo_temp);
 end;
 
 procedure TfAtualiza.tmrFechaTimer(Sender: TObject);
@@ -443,16 +443,16 @@ var
   Result : Integer;
   SearchRec: TSearchRec;
 begin
-  if (DirectoryExists(fmIndex.dir_temp)) then
+  if (DirectoryExists(Settings.TempDir)) then
   begin
-    result := FindFirst(fmIndex.dir_temp+'*.*', faAnyFile, SearchRec);
+    result := FindFirst(Settings.TempDir+'*.*', faAnyFile, SearchRec);
     While Result = 0 do
     begin
-      DeleteFile(fmIndex.dir_temp + SearchRec.Name);
+      DeleteFile(Settings.TempDir + SearchRec.Name);
       Result := FindNext(SearchRec);
     end;
   end
-  else CreateDir(fmIndex.dir_temp);
+  else CreateDir(Settings.TempDir);
 end;
 
 end.

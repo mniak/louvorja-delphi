@@ -2197,7 +2197,6 @@ type
   public
     { Public declarations }
     dir_dados: string;
-    dir_temp: string;
     dir_config: string;
     url_params: string;
 
@@ -2296,7 +2295,7 @@ procedure TfmIndex.FormDestroy(Sender: TObject);
 begin
   RichEdit1Exit(Sender);
   usaFontes(false);
-  RecursiveDelete(dir_temp);
+  RecursiveDelete(Settings.TempDir);
 end;
 
 procedure TfmIndex.FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -6855,7 +6854,7 @@ begin
       begin
         ZipFile := TZipFile.Create;
         try
-          dir_t := fmIndex.dir_temp+'~edit_'+FormatDateTime('yyyymmddHHMMSSZZZ', now());
+          dir_t := Settings.TempDir+'~edit_'+FormatDateTime('yyyymmddHHMMSSZZZ', now());
           ZipFile.Open(arquivo, zmRead);
           ZipFile.ExtractAll(dir_t);
           ZipFile.Close;
@@ -12349,7 +12348,7 @@ begin
   begin
     ZipFile := TZipFile.Create;
     try
-      dir_t := dir_temp+'~read_'+FormatDateTime('yyyymmddHHMMSSZZZ', now());
+      dir_t := Settings.TempDir+'~read_'+FormatDateTime('yyyymmddHHMMSSZZZ', now());
       ZipFile.Open(arq, zmRead);
       ZipFile.ExtractAll(dir_t);
       ZipFile.Close;
@@ -12972,7 +12971,7 @@ begin
       try
         ZipFile.Open(url, zmWrite);
 
-        arq := dir_temp+'~save_'+ExtractFileName(url)+'_'+FormatDateTime('yyyymmddHHMMSSZZZ', now())+'.temp';
+        arq := Settings.TempDir+'~save_'+ExtractFileName(url)+'_'+FormatDateTime('yyyymmddHHMMSSZZZ', now())+'.temp';
         arquivo := Tmeminifile.Create(arq);
         arquivo.Clear;
 
@@ -13568,7 +13567,7 @@ begin
     try
       ZipFile.Open(url, zmWrite);
 
-      arq := dir_temp+'~save_'+ExtractFileName(url)+'_'+FormatDateTime('yyyymmddHHMMSSZZZ', now())+'.temp';
+      arq := Settings.TempDir+'~save_'+ExtractFileName(url)+'_'+FormatDateTime('yyyymmddHHMMSSZZZ', now())+'.temp';
       arquivo := Tmeminifile.Create(arq);
       arquivo.Clear;
 

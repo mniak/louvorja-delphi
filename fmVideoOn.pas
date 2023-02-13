@@ -33,7 +33,7 @@ implementation
 {$R *.dfm}
 
 uses
-  fmMenu;
+  fmMenu, Settings;
 
 procedure TfVideoOn.CreateParams(var Params: TCreateParams);
 begin
@@ -54,7 +54,7 @@ begin
   wbVideo.Visible := false;
   pnlLoading.Visible := not wbVideo.Visible;
 
-  dir := fmIndex.dir_temp + 'video.html';
+  dir := Settings.TempDir + 'video.html';
   mmHTML.Lines.SaveToFile(dir);
   wbVideo.Navigate(dir + '?' + id);
 end;

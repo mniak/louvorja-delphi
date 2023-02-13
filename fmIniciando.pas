@@ -73,7 +73,6 @@ var
   Flags: Cardinal;
   externo: Boolean;
   dir_dados: string;
-  dir_temp: string;
   dir_config: string;
   url_params: string;
 begin
@@ -159,18 +158,11 @@ begin
 
   //**CARREGA VARIAVEIS*********************************************************
   dir_dados := GetEnvironmentVariable('APPDATA')+'\LouvorJA\';
-  dir_temp := GetEnvironmentVariable('TEMP')+'\LouvorJA\';
   url_params := 'https://louvorja.com.br/params/params.php';
 
 
   if not(DirectoryExists(dir_dados)) then
     CreateDir(dir_dados);
-
-  if not(DirectoryExists(dir_temp)) then
-    CreateDir(dir_temp);
-
-  if not(DirectoryExists(dir_temp)) then
-    dir_temp := GetEnvironmentVariable('TEMP')+'\';
 
   //**ATIVANDO PROGRAMA*********************************************************
   AppCreateForm(TfmIndex, fmIndex);
@@ -188,7 +180,6 @@ begin
   fmIndex.arq_liturgia := arq_liturgia;
   fmIndex.senha_bd := senha_bd;
   fmIndex.dir_dados := dir_dados;
-  fmIndex.dir_temp := dir_temp;
   fmIndex.dir_config := dir_config;
   fmIndex.externo := externo;
   fmIndex.url_params := url_params;

@@ -479,7 +479,7 @@ begin
     then audio := true
     else audio := false;
 
-  arq := fmIndex.dir_temp+'~cds.tmp';
+  arq := Settings.TempDir+'~cds.tmp';
   DM.cdsSLIDE_MUSICA2.SaveToFile(arq);
 
   fmIndex.abreLetraMusica('CDS',arq,-1,audio);
@@ -1506,7 +1506,7 @@ begin
   arquivo := param.Values['arquivo'];
   if (Trim(arquivo) = '') then
   begin
-    arquivo := fmIndex.dir_temp+'~editor.tmp';
+    arquivo := Settings.TempDir+'~editor.tmp';
     arquivo_tmp := TStringList.Create();
     arquivo_tmp.Clear;
     arquivo_tmp.Add('[Geral]');
@@ -1543,7 +1543,7 @@ begin
   begin
     ZipFile := TZipFile.Create;
     try
-      dir_t := fmIndex.dir_temp+'~edit_'+FormatDateTime('yyyymmddHHMMSSZZZ', now());
+      dir_t := Settings.TempDir+'~edit_'+FormatDateTime('yyyymmddHHMMSSZZZ', now());
       ZipFile.Open(arquivo, zmRead);
       ZipFile.ExtractAll(dir_t);
       ZipFile.Close;
