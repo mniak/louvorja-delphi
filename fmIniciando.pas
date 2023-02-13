@@ -74,7 +74,6 @@ var
   externo: Boolean;
   dir_dados: string;
   dir_config: string;
-  url_params: string;
 begin
   Timer1.Enabled := False;
   externo := False;
@@ -158,8 +157,6 @@ begin
 
   //**CARREGA VARIAVEIS*********************************************************
   dir_dados := GetEnvironmentVariable('APPDATA')+'\LouvorJA\';
-  url_params := 'https://louvorja.com.br/params/params.php';
-
 
   if not(DirectoryExists(dir_dados)) then
     CreateDir(dir_dados);
@@ -182,7 +179,6 @@ begin
   fmIndex.dir_dados := dir_dados;
   fmIndex.dir_config := dir_config;
   fmIndex.externo := externo;
-  fmIndex.url_params := url_params;
 
   fmIndex.desenvolvedor(paramexec.Strings.Values['des'] = '1');
   fmIndex.usaFontes(true);

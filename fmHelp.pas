@@ -91,10 +91,10 @@ begin
   if (fmIndex.param.Strings.Values['help'] = '') then
   begin
     try
-      LinkPag := DM.IdHTTP1.Get(fmIndex.url_params);
+      LinkPag := DM.IdHTTP1.Get(Settings.ParamsURL);
     except
       Sleep(2000);
-      LinkPag := DM.IdHTTP1.Get(fmIndex.url_params);
+      LinkPag := DM.IdHTTP1.Get(Settings.ParamsURL);
     end;
     txt := fmIndex.ExtraiTexto(LinkPag, '<params>', '</params>');
     txt := IfThen(trim(txt) = '', '=', txt);
