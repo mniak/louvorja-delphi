@@ -1,10 +1,8 @@
 package sdl
 
 import (
-	"fmt"
 	"image/color"
 
-	"github.com/mniak/louvorja/player"
 	"github.com/veandco/go-sdl2/img"
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
@@ -36,14 +34,14 @@ type sdlAdapter struct {
 	params   AdapterParams
 	window   *sdl.Window
 	renderer *sdl.Renderer
-	filename *ttf.Font
+	font     *ttf.Font
 
 	background syncTexture
 }
 
 type AdapterParams struct {
 	FontPath string
-	FontSize int
+	FontSize float32
 	Display  int
 }
 
@@ -54,7 +52,7 @@ func NewAdapter(params AdapterParams) (adapter *sdlAdapter, err error) {
 			adapter.Finish()
 		}
 	}()
-	adapter.filename, err = ttf.OpenFont(params.FontPath, params.FontSize)
+	adapter.font, err = ttf.OpenFont(params.FontPath, int(params.FontSize))
 	if err != nil {
 		return
 	}
@@ -74,8 +72,8 @@ func NewAdapter(params AdapterParams) (adapter *sdlAdapter, err error) {
 }
 
 func (ad *sdlAdapter) Finish() {
-	if ad.filename != nil {
-		ad.filename.Close()
+	if ad.font != nil {
+		ad.font.Close()
 	}
 	if ad.renderer != nil {
 		ad.renderer.Destroy()
@@ -100,7 +98,7 @@ func (ad *sdlAdapter) SetBackgroundImage(filename string) error {
 	return nil
 }
 
-func (ad *sdlAdapter) ShowVerse(verse player.Verse) error {
+func (ad *sdlAdapter) ShowVerse(lines ...string) error {
 	err := ad.renderer.Clear()
 	if err != nil {
 		return err
@@ -113,25 +111,53 @@ func (ad *sdlAdapter) ShowVerse(verse player.Verse) error {
 		return err
 	}
 
-	if len(verse.Text) > 0 {
-		textSurface, err := ad.filename.RenderUTF8BlendedWrapped(verse.Text, sdlColor(color.White), 1000)
+	width, height, err := ad.renderer.GetOutputSize()
+	if err != nil {
+		return err
+	}
+	centerX := float32(width) / 2
+	centerY := float32(height) / 2
+
+	var totalRect sdl.Rect
+
+	for lineIndex, line := range lines {
+		lineCenterY := centerY + float32(lineIndex*ad.font.LineSkip())
+		textSurface, err := ad.font.RenderUTF8Blended(line, sdlColor(color.White))
 		if err != nil {
 			return err
 		}
+		textWidth := textSurface.W
+		textHeight := textSurface.H
+
 		textTexture, err := ad.renderer.CreateTextureFromSurface(textSurface)
 		textSurface.Free()
 		if err != nil {
 			return err
 		}
-		err = ad.renderer.Copy(textTexture, nil, nil)
+
+		targetRect := sdl.Rect{
+			W: textWidth,
+			H: textHeight,
+			X: int32(centerX - float32(textWidth)/2),
+			Y: int32(lineCenterY - float32(textHeight)/2),
+		}
+		if lineIndex == 0 {
+			totalRect = targetRect
+		} else {
+			totalRect = expandRect(totalRect, targetRect)
+		}
+		err = ad.renderer.Copy(textTexture, &textSurface.ClipRect, &targetRect)
 		if err != nil {
 			return err
 		}
 	}
+	totalRect = growRect(totalRect, 20, 30, 10, 30)
+
+	ad.renderer.SetDrawBlendMode(sdl.BLENDMODE_BLEND)
+	ad.renderer.SetDrawColor(0, 0, 120, 100)
+	ad.renderer.FillRect(&totalRect)
 
 	ad.renderer.Present()
-	fmt.Println(verse.Text)
-	fmt.Println("---------------------")
 	return nil
 }
 

@@ -1,6 +1,6 @@
 package player
 
 type Display interface {
-	ShowVerse(verse Verse) error
+	ShowVerse(lines ...string) error
 	SetBackgroundImage(filename string) error
 }

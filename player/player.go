@@ -2,6 +2,7 @@ package player
 
 import (
 	"fmt"
+	"strings"
 	"time"
 )
 
@@ -38,7 +39,7 @@ func (p *Player) PrintLyrics() error {
 		// fmt.Println()
 		// time.Sleep(timeToSleep)
 
-		p.Display.ShowVerse(verse)
+		p.Display.ShowVerse(strings.Split(verse.Text, "\n")...)
 		time.Sleep(2 * time.Second)
 	}
 	return nil
