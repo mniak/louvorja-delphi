@@ -29,8 +29,14 @@ var cmdPlay = &cobra.Command{
 		sqliteAdapter := lo.Must(sqlite.NewAdapter(dbFilePath))
 		defer sqliteAdapter.Close()
 
+		lo.Must0(sdl.Init())
+		defer sdl.Quit()
+
 		// consoleAdapter := console.NewAdapter()
-		sdlAdapter := lo.Must(sdl.Init("../config/fontes/din-condensed-bold.ttf"))
+		sdlAdapter := lo.Must(sdl.NewAdapter(sdl.AdapterParams{
+			FontPath: "../config/fontes/din-condensed-bold.ttf",
+			FontSize: 72,
+		}))
 		defer sdlAdapter.Finish()
 
 		app := player.Player{

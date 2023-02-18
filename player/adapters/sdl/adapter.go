@@ -5,74 +5,131 @@ import (
 	"image/color"
 
 	"github.com/mniak/louvorja/player"
+	"github.com/veandco/go-sdl2/img"
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
 )
 
-type sdlAdapter struct {
-	window *sdl.Window
-	font   *ttf.Font
+var initialized bool
+
+func Init() error {
+	err := sdl.Init(sdl.INIT_VIDEO)
+	if err != nil {
+		return err
+	}
+
+	err = ttf.Init()
+	if err != nil {
+		sdl.Quit()
+		return err
+	}
+	initialized = true
+	return nil
 }
 
-func Init(fontpath string) (adapter *sdlAdapter, err error) {
+func Quit() {
+	ttf.Quit()
+	sdl.Quit()
+}
+
+type sdlAdapter struct {
+	params   AdapterParams
+	window   *sdl.Window
+	renderer *sdl.Renderer
+	filename *ttf.Font
+
+	background syncTexture
+}
+
+type AdapterParams struct {
+	FontPath string
+	FontSize int
+	Display  int
+}
+
+func NewAdapter(params AdapterParams) (adapter *sdlAdapter, err error) {
 	adapter = new(sdlAdapter)
 	defer func() {
 		if err != nil {
 			adapter.Finish()
 		}
 	}()
-	err = sdl.Init(sdl.INIT_VIDEO)
+	adapter.filename, err = ttf.OpenFont(params.FontPath, params.FontSize)
 	if err != nil {
 		return
 	}
 
-	adapter.window, err = sdl.CreateWindow("Louvor JA Player Standalone",
-		sdl.WINDOWPOS_UNDEFINED, sdl.WINDOWPOS_UNDEFINED,
-		800, 600,
-		sdl.WINDOW_SHOWN,
-	)
+	mode, err := sdl.GetCurrentDisplayMode(params.Display)
 	if err != nil {
 		return
 	}
-
-	ttf.Init()
-	adapter.font, err = ttf.OpenFont(fontpath, 96)
+	adapter.window, adapter.renderer, err = sdl.CreateWindowAndRenderer(
+		mode.W, mode.H,
+		sdl.WINDOW_HIDDEN|sdl.WINDOW_FULLSCREEN)
 	if err != nil {
 		return
 	}
+	adapter.window.Show()
 	return
 }
 
 func (ad *sdlAdapter) Finish() {
-	if ad.font != nil {
-		ad.font.Close()
+	if ad.filename != nil {
+		ad.filename.Close()
 	}
-	ttf.Quit()
+	if ad.renderer != nil {
+		ad.renderer.Destroy()
+	}
 	if ad.window != nil {
 		ad.window.Destroy()
 	}
-	sdl.Quit()
+}
+
+func (ad *sdlAdapter) SetBackgroundImage(filename string) error {
+	imgSurf, err := img.Load(filename)
+	if err != nil {
+		return err
+	}
+	texture, err := ad.renderer.CreateTextureFromSurface(imgSurf)
+	texture.Query()
+	imgSurf.Free()
+	if err != nil {
+		return err
+	}
+	ad.background.Replace(texture)
+	return nil
 }
 
 func (ad *sdlAdapter) ShowVerse(verse player.Verse) error {
-	verse.Text = "Line 1\nLine 2"
-	winSurface, err := ad.window.GetSurface()
+	err := ad.renderer.Clear()
 	if err != nil {
 		return err
 	}
-	textSurface, err := ad.font.RenderUTF8BlendedWrapped(verse.Text, sdlColor(color.White), 1000)
+
+	err = ad.background.UseLocked(func(bg *sdl.Texture) error {
+		return ad.renderer.Copy(bg, nil, nil)
+	})
 	if err != nil {
 		return err
 	}
-	err = textSurface.Blit(&textSurface.ClipRect, winSurface, &winSurface.ClipRect)
-	textSurface.Free()
-	if err != nil {
-		return err
+
+	if len(verse.Text) > 0 {
+		textSurface, err := ad.filename.RenderUTF8BlendedWrapped(verse.Text, sdlColor(color.White), 1000)
+		if err != nil {
+			return err
+		}
+		textTexture, err := ad.renderer.CreateTextureFromSurface(textSurface)
+		textSurface.Free()
+		if err != nil {
+			return err
+		}
+		err = ad.renderer.Copy(textTexture, nil, nil)
+		if err != nil {
+			return err
+		}
 	}
-	err = ad.window.UpdateSurface()
-	if err != nil {
-		return err
-	}
+
+	ad.renderer.Present()
 	fmt.Println(verse.Text)
 	fmt.Println("---------------------")
 	return nil

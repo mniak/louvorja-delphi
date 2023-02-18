@@ -18,24 +18,28 @@ func (p *Player) PrintLyrics() error {
 		return err
 	}
 
-	fmt.Println("HINO:", song.Name)
-	var elapsed int
-	for _, verse := range song.Verses {
-		if verse.Time < elapsed {
-			fmt.Println("BLANK SLIDE")
-			continue
-		}
-		timeNum := verse.Time - elapsed
-		elapsed = verse.Time
+	err = p.Display.SetBackgroundImage("../config/imagens/hasd_018.jpg")
+	if err != nil {
+		return err
+	}
 
-		timeToSleep := convertTime(timeNum)
-		fmt.Println("Sleeping:", timeToSleep)
-		fmt.Println()
-		time.Sleep(timeToSleep)
+	fmt.Println("HINO:", song.Name)
+	// var elapsed int
+	for _, verse := range song.Verses {
+		// if verse.Time < elapsed {
+		// 	fmt.Println("BLANK SLIDE")
+		// 	continue
+		// }
+		// timeNum := verse.Time - elapsed
+		// elapsed = verse.Time
+
+		// timeToSleep := convertTime(timeNum)
+		// fmt.Println("Sleeping:", timeToSleep)
+		// fmt.Println()
+		// time.Sleep(timeToSleep)
 
 		p.Display.ShowVerse(verse)
-
-		time.Sleep(400 * time.Hour)
+		time.Sleep(2 * time.Second)
 	}
 	return nil
 }
