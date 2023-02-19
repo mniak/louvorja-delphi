@@ -61,9 +61,3 @@ func (p *Player) PrintLyrics() error {
 // 		}
 // 	}
 // }
-
-func convertTime(num int) time.Duration {
-	const timefactor = time.Microsecond * 44 / 32
-	result := timefactor * time.Duration(num)
-	return result
-}
