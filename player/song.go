@@ -1,5 +1,7 @@
 package player
 
+import "time"
+
 type Song struct {
 	Title      string
 	CoverImage string
@@ -8,5 +10,5 @@ type Song struct {
 
 type Verse struct {
 	Text string
-	Time int
+	Time time.Duration
 }

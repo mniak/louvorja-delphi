@@ -68,7 +68,7 @@ func (ad *sqliteAdapter) versesBySongID(songID string) ([]player.Verse, error) {
 		if row.Letra.Valid {
 			verse.Text = row.Letra.String
 		}
-		verse.Time = row.Tempo
+		verse.Time = player.ParseTime(row.Tempo)
 		verses = append(verses, verse)
 	}
 	return verses, nil
