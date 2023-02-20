@@ -3,6 +3,7 @@ package sdl
 import (
 	"log"
 
+	"github.com/samber/lo"
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
 )
@@ -124,6 +125,10 @@ func (ad *sdlAdapter) SetBackgroundImage(filename string) error {
 }
 
 func (ad *sdlAdapter) ShowVerse(lines ...string) error {
+	lines = lo.Map(lines, func(line string, _ int) string {
+		return adjustCase(line, ad.params.LetterCase)
+	})
+
 	ad.context.data.Patch(RenderData{
 		Lines: lines,
 	})
