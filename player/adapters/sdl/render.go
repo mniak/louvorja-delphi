@@ -3,6 +3,7 @@ package sdl
 import (
 	"fmt"
 	"image/color"
+	"log"
 
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
@@ -13,17 +14,18 @@ type RenderData struct {
 	Lines      []string
 }
 
-func (data *RenderData) Patch(new RenderData) error {
+func (data *RenderData) Patch(new RenderData) {
 	if new.Background != nil {
 		if data.Background != nil {
-			data.Background.Destroy()
+			if err := data.Background.Destroy(); err != nil {
+				log.Println("Faild to destroy background while replacing it", err)
+			}
 		}
 		data.Background = new.Background
 	}
 	if new.Lines != nil {
 		data.Lines = new.Lines
 	}
-	return nil
 }
 
 func (data *RenderData) Destroy() error {
@@ -33,55 +35,18 @@ func (data *RenderData) Destroy() error {
 	return nil
 }
 
-func NewRenderContext() RenderContext {
-	return RenderContext{
-		data:        new(RenderData),
-		dataChanged: make(chan struct{}),
-		stopChannel: make(chan struct{}),
-	}
-}
-
 type RenderContext struct {
 	renderer *sdl.Renderer
 	font     *ttf.Font
-
-	data        *RenderData
-	dataChanged chan struct{}
-	stopChannel chan struct{}
+	data     RenderData
 }
 
-func (rc *RenderContext) UpdateData(newData RenderData) error {
-	rc.data.Patch(newData)
-	rc.dataChanged <- struct{}{}
-	return nil
-}
-
-func (rc *RenderContext) StartRendering() error {
-	if err := rc.render(); err != nil {
+func (rc *RenderContext) Render() error {
+	err := rc.renderer.SetDrawColor(0, 0, 0, 255)
+	if err != nil {
 		return err
 	}
-
-	go func() {
-		for {
-			select {
-			case <-rc.stopChannel:
-				return
-			case <-rc.dataChanged:
-				err := rc.render()
-				if err != nil {
-					// TODO: log in some way
-					return
-				}
-
-			}
-		}
-	}()
-	return nil
-}
-
-func (rc *RenderContext) render() error {
-	fmt.Print("Clear... ")
-	err := rc.renderer.Clear()
+	err = rc.renderer.Clear()
 	if err != nil {
 		return err
 	}
@@ -153,6 +118,10 @@ func (rc *RenderContext) render() error {
 		}
 	}
 	totalRect = growRect(totalRect, 20, 30, 10, 30)
+	err = rc.renderer.SetDrawColor(0, 0, 0, 200)
+	if err != nil {
+		return err
+	}
 	rc.renderer.FillRect(&totalRect)
 
 	// Text

@@ -1,6 +1,8 @@
 package sdl
 
 import (
+	"log"
+
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
 )
@@ -50,7 +52,6 @@ type AdapterParams struct {
 
 func NewAdapter(params AdapterParams) (adapter *sdlAdapter, err error) {
 	adapter = new(sdlAdapter)
-	adapter.context = NewRenderContext()
 
 	defer func() {
 		if err != nil {
@@ -64,16 +65,14 @@ func NewAdapter(params AdapterParams) (adapter *sdlAdapter, err error) {
 		return
 	}
 
-	// mode, err := sdl.GetCurrentDisplayMode(params.Display)
-	// if err != nil {
-	// 	return
-	// }
+	mode, err := sdl.GetCurrentDisplayMode(params.Display)
+	if err != nil {
+		return
+	}
 
 	window, renderer, err := sdl.CreateWindowAndRenderer(
-		// mode.W, mode.H,
-		int32(800), int32(600),
-		// sdl.WINDOW_HIDDEN|sdl.WINDOW_FULLSCREEN,
-		sdl.WINDOW_SHOWN,
+		mode.W, mode.H,
+		sdl.WINDOW_HIDDEN|sdl.WINDOW_FULLSCREEN,
 	)
 	adapter.window = window
 	adapter.context.renderer = renderer
@@ -86,17 +85,11 @@ func NewAdapter(params AdapterParams) (adapter *sdlAdapter, err error) {
 		return
 	}
 
-	// Color of the box
-	err = renderer.SetDrawColor(0, 0, 250, 200)
+	err = adapter.context.Render()
 	if err != nil {
 		return
 	}
-
-	err = adapter.context.StartRendering()
-	if err != nil {
-		return
-	}
-	// adapter.window.Show()
+	adapter.window.Show()
 	return
 }
 
@@ -105,11 +98,17 @@ func (ad *sdlAdapter) Finish() {
 		ad.context.font.Close()
 	}
 	if ad.context.renderer != nil {
-		ad.context.renderer.Destroy()
+		if err := ad.context.renderer.Destroy(); err != nil {
+			log.Println("Faild to destroy background while replacing it", err)
+		}
 	}
-	ad.context.data.Destroy()
+	if err := ad.context.data.Destroy(); err != nil {
+		log.Println("Faild to destroy background while replacing it", err)
+	}
 	if ad.window != nil {
-		ad.window.Destroy()
+		if err := ad.window.Destroy(); err != nil {
+			log.Println("Faild to destroy background while replacing it", err)
+		}
 	}
 }
 
@@ -118,13 +117,15 @@ func (ad *sdlAdapter) SetBackgroundImage(filename string) error {
 	if err != nil {
 		return err
 	}
-	return ad.context.UpdateData(RenderData{
+	ad.context.data.Patch(RenderData{
 		Background: tex,
 	})
+	return ad.context.Render()
 }
 
 func (ad *sdlAdapter) ShowVerse(lines ...string) error {
-	return ad.context.UpdateData(RenderData{
+	ad.context.data.Patch(RenderData{
 		Lines: lines,
 	})
+	return ad.context.Render()
 }

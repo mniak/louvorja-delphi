@@ -45,8 +45,6 @@ var cmdPlay = &cobra.Command{
 			Display: sdlAdapter,
 		}
 		lo.Must0(app.PrintLyrics())
-		// song := lo.Must(player.loadSong(dbFilePath))
-		// lo.Must0(playHymn(mdbfile, hymnName))
 	},
 }
 
