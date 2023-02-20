@@ -1,7 +1,6 @@
 package player
 
 import (
-	"fmt"
 	"strings"
 	"time"
 )
@@ -19,12 +18,12 @@ func (p *Player) PrintLyrics() error {
 		return err
 	}
 
-	err = p.Display.SetBackgroundImage("../config/imagens/hasd_018.jpg")
+	imgPath := "config/imagens/hasd_018.jpg"
+	err = p.Display.SetBackgroundImage(imgPath)
 	if err != nil {
 		return err
 	}
 
-	fmt.Println("HINO:", song.Name)
 	// var elapsed int
 	for _, verse := range song.Verses {
 		// if verse.Time < elapsed {

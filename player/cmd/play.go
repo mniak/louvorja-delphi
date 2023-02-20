@@ -34,7 +34,7 @@ var cmdPlay = &cobra.Command{
 
 		// consoleAdapter := console.NewAdapter()
 		sdlAdapter := lo.Must(sdl.NewAdapter(sdl.AdapterParams{
-			FontPath: "../config/fontes/din-condensed-bold.ttf",
+			FontPath: "config/fontes/din-condensed-bold.ttf",
 			FontSize: 96,
 		}))
 		defer sdlAdapter.Finish()
