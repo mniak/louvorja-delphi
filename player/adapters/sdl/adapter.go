@@ -1,6 +1,7 @@
 package sdl
 
 import (
+	"image/color"
 	"log"
 
 	"github.com/samber/lo"
@@ -130,7 +131,18 @@ func (ad *sdlAdapter) ShowVerse(lines ...string) error {
 	})
 
 	ad.context.data.Patch(RenderData{
-		Lines: lines,
+		Text:      lines,
+		TextColor: color.White,
+	})
+	return ad.context.Render()
+}
+
+func (ad *sdlAdapter) ShowTitle(title string) error {
+	title = adjustCase(title, ad.params.LetterCase)
+
+	ad.context.data.Patch(RenderData{
+		Text:      []string{title},
+		TextColor: color.RGBA{R: 0xef, G: 0xb4},
 	})
 	return ad.context.Render()
 }

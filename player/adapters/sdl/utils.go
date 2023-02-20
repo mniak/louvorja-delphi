@@ -18,7 +18,7 @@ func LoadImageToTexture(renderer *sdl.Renderer, filename string) (*sdl.Texture, 
 	return texture, err
 }
 
-func sdlColor(c color.Color) sdl.Color {
+func Color(c color.Color) sdl.Color {
 	r, g, b, a := c.RGBA()
 	return sdl.Color(color.RGBA{uint8(r), uint8(g), uint8(b), uint8(a)})
 }

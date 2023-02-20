@@ -11,7 +11,8 @@ import (
 
 type RenderData struct {
 	Background *sdl.Texture
-	Lines      []string
+	Text       []string
+	TextColor  color.Color
 }
 
 func (data *RenderData) Patch(new RenderData) {
@@ -23,8 +24,11 @@ func (data *RenderData) Patch(new RenderData) {
 		}
 		data.Background = new.Background
 	}
-	if new.Lines != nil {
-		data.Lines = new.Lines
+	if new.Text != nil {
+		data.Text = new.Text
+	}
+	if new.TextColor != nil {
+		data.TextColor = new.TextColor
 	}
 }
 
@@ -78,13 +82,13 @@ func (rc *RenderContext) Render() error {
 	}
 
 	// Pre-render texts and calculate position
-	renderLines := make([]RenderLine, len(rc.data.Lines))
-	for lineIndex, line := range rc.data.Lines {
+	renderLines := make([]RenderLine, len(rc.data.Text))
+	for lineIndex, line := range rc.data.Text {
 
 		// line = adjustCase(line, rc.params.LetterCase)
 
-		lineCenterY := centerY + float32((lineIndex*2-len(rc.data.Lines))*rc.font.LineSkip())/2 + 60
-		textSurface, err := rc.font.RenderUTF8Blended(line, sdlColor(color.White))
+		lineCenterY := centerY + float32((lineIndex*2-len(rc.data.Text))*rc.font.LineSkip())/2 + 60
+		textSurface, err := rc.font.RenderUTF8Blended(line, Color(rc.data.TextColor))
 		if err != nil {
 			return err
 		}
