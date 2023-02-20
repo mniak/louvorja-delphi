@@ -42,9 +42,10 @@ var cmdPlay = &cobra.Command{
 		app := player.Player{
 			SongLoader: sqliteAdapter,
 			// Display:    consoleAdapter,
-			Display: sdlAdapter,
+			Display:   sdlAdapter,
+			ImagesDir: "config/imagens",
 		}
-		lo.Must0(app.PrintLyrics())
+		lo.Must0(app.PresentLyrics())
 	},
 }
 

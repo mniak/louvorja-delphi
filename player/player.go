@@ -1,6 +1,7 @@
 package player
 
 import (
+	"path/filepath"
 	"strings"
 	"time"
 )
@@ -8,23 +9,26 @@ import (
 type Player struct {
 	SongLoader SongLoader
 	Display    Display
+	ImagesDir  string
 }
 
 const santoSantoSantoID = "1728"
 
-func (p *Player) PrintLyrics() error {
+func (p *Player) PresentLyrics() error {
 	song, err := p.SongLoader.SongByID(santoSantoSantoID)
 	if err != nil {
 		return err
 	}
 
-	imgPath := "config/imagens/hasd_018.jpg"
+	imgPath := filepath.Join(p.ImagesDir, song.CoverImage)
 	err = p.Display.SetBackgroundImage(imgPath)
 	if err != nil {
 		return err
 	}
 
 	// var elapsed int
+
+	p.Display.ShowTitle(song.Title)
 	for _, verse := range song.Verses {
 		// if verse.Time < elapsed {
 		// 	fmt.Println("BLANK SLIDE")
@@ -38,8 +42,8 @@ func (p *Player) PrintLyrics() error {
 		// fmt.Println()
 		// time.Sleep(timeToSleep)
 
-		p.Display.ShowVerse(strings.Split(verse.Text, "\n")...)
 		time.Sleep(2 * time.Second)
+		p.Display.ShowVerse(strings.Split(verse.Text, "\n")...)
 	}
 	return nil
 }

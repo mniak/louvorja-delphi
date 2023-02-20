@@ -1,8 +1,9 @@
 package player
 
 type Song struct {
-	Name   string
-	Verses []Verse
+	Title      string
+	CoverImage string
+	Verses     []Verse
 }
 
 type Verse struct {
